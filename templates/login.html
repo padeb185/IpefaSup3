@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block bodyId %}loginPage{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+<form action="{% url 'login' %}" method="post">
+  {% csrf_token %}
+  {% if error %}
+  <p class="error">{{ error }}</p>
+  {% endif %}
+  
+  <p>
+      <label for="email">E-mail :</label>
+      <input name="email" id="email" size="30" type="email" required>
+  </p>
+  
+  <p>
+      <label for="password">Mot de passe :</label>
+      <input name="password" id="password" size="30" type="password" required>
+  </p>
+  
+  <p>
+    <input type="submit" value="Se connecter" />
+    <a href="#">Créer un compte</a>
+  </p>
+</form>
+{% endblock %}
