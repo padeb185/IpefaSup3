@@ -7,6 +7,24 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Educator  # Assurez-vous que le modèle est bien importé
 
+
+
+# views.py
+from django.shortcuts import render
+
+def accueil(request):
+    return render(request, 'accueil.html')
+
+def etudiant_view(request):
+    return render(request, 'etudiant.html')
+
+def educateur_view(request):
+    return render(request, 'educateur.html')
+
+def professeur_view(request):
+    return render(request, 'professeur.html')
+
+
 def get_logged_user_from_request(request):
     """ Récupère l'éducateur connecté si disponible """
     logged_user_id = request.session.get('logged_user_id')  # Utilisation de .get() pour éviter KeyError
@@ -45,6 +63,30 @@ def login(request):
     else:
         form = LoginForm(request.POST)
         return render(request, "login.html", {'form':form})
+
+
+def login_etudiant(request):
+    if len(request.POST)>0:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            return redirect('/welcome/etudiant')
+        else:
+            return render(request, "login.etudiant.html", {'form':form})
+    else:
+        form = LoginForm(request.POST)
+        return render(request, "login.etudiant.html", {'form':form})
+
+def login_professeur(request):
+    if len(request.POST)>0:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            return redirect('/welcome/professeur')
+        else:
+            return render(request, "login.professeur.html", {'form':form})
+    else:
+        form = LoginForm(request.POST)
+        return render(request, "login.professeur.html", {'form':form})
+
 
 @login_required
 def add_student_views(request):

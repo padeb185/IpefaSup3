@@ -1,0 +1,14 @@
+<!-- templates/accueil.html -->
+{% extends "base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+    <h1>Accueil</h1>
+    <p>Choisissez votre rôle :</p>
+    <ul>
+        <li><a href="{% url 'etudiant' %}">Étudiant</a></li>
+        <li><a href="{% url 'educateur' %}">Éducateur</a></li>
+        <li><a href="{% url 'professeur' %}">Professeur</a></li>
+    </ul>
+{% endblock %}

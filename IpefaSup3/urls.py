@@ -14,18 +14,35 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from django.contrib import admin
-from django.urls import path
-
+from django.contrib import admin
 from django.contrib.auth import login
 from django.contrib import admin
 from django.urls import path
-from .views import welcome, login, add_student_views
+from .views import (
+    accueil,
+    etudiant_view,
+    educateur_view,
+    professeur_view,
+    login,
+    welcome,
+    add_student_views, login_etudiant, login_professeur,
+)
 
 urlpatterns = [
-       path('', login),
-       path("login/", login, name="login"),
-       path("welcome/", welcome, name="welcome"),
-       path('welcome/add_student/', add_student_views, name='add_student'),
-       path('admin/', admin.site.urls),
+    path('', accueil, name='accueil'),
+
+    path('etudiant/', etudiant_view, name='etudiant'),
+
+    path('educateur/', educateur_view, name='educateur'),
+
+    path('professeur/', professeur_view, name='professeur'),
+
+    path("login/", login, name="login"),
+    path("login.etudiant/", login_etudiant, name="login.etudiant"),
+    path("login.professeur/", login_professeur, name="login.professeur"),
+    path("welcome/", welcome, name="welcome"),
+
+    path('welcome/add_student/', add_student_views, name='add_student'),
+
+    path('admin/', admin.site.urls),
 ]
