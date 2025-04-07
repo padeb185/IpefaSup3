@@ -18,15 +18,8 @@ from django.contrib import admin
 from django.contrib.auth import login
 from django.contrib import admin
 from django.urls import path
-from .views import (
-    accueil,
-    etudiant_view,
-    educateur_view,
-    professeur_view,
-    login,
-    welcome,
-    add_student_views, login_etudiant, login_professeur,
-)
+from IpefaSup3.views import accueil, etudiant_view, educateur_view, professeur_view, login, welcome, add_student_views, \
+    login_etudiant, login_professeur
 
 urlpatterns = [
     path('', accueil, name='accueil'),

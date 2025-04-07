@@ -121,6 +121,3 @@ def add_student_views(request):
 
 
 
-def validate_efpl_email(value):
-    if not re.match(r'^[a-zA-Z]+\.[a-zA-Z]+@efpl\.be$', value):
-        raise ValidationError("Email doit être au format prénom.nom@efpl.be")

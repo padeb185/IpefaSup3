@@ -3,7 +3,8 @@ from django import forms
 from .models import Person, Educator, Employee, Teacher, Student
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
-from .views import validate_efpl_email
+from .utils import validate_efpl_email
+
 
 
 class LoginForm(forms.Form):
