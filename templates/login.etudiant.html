@@ -21,12 +21,30 @@
   
   <p>
       <label for="password">Mot de passe :</label>
-      <input name="password" id="password" size="30" type="password" required>
-  </p>
-  
-  <p>
-    <input type="submit" value="Se connecter" />
-
+      <input type="submit" id="submit-btn" value="Se connecter" disabled />
   </p>
 </form>
+
+<!-- Script de validation pour étudiant -->
+<script>
+    const emailInput = document.getElementById("email");
+    const errorSpan = document.getElementById("email-error");
+    const submitBtn = document.getElementById("submit-btn");
+
+    emailInput.addEventListener("input", function () {
+        const email = emailInput.value;
+        const regex = /^[a-zA-Z]+\.[a-zA-Z]+@student\.efpl\.be$/;
+
+        if (email === "") {
+            errorSpan.textContent = "";
+            submitBtn.disabled = true;
+        } else if (!regex.test(email)) {
+            errorSpan.textContent = "L'adresse email doit être au format prénom.nom@student.efpl.be";
+            submitBtn.disabled = true;
+        } else {
+            errorSpan.textContent = "";
+            submitBtn.disabled = false;
+        }
+    });
+</script>
 {% endblock %}

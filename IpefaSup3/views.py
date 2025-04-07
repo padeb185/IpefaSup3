@@ -1,5 +1,4 @@
-from typing import re
-
+import re
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from .forms import LoginForm, AddStudentForm
@@ -118,6 +117,9 @@ def add_student_views(request):
         form = AddStudentForm()  # Initialisation propre du formulaire
 
     return render(request, 'welcome/add_student.html', {'form': form})
+
+
+
 
 def validate_efpl_email(value):
     if not re.match(r'^[a-zA-Z]+\.[a-zA-Z]+@efpl\.be$', value):
