@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="html files">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/welcome.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome.html" afterDir="false" />
-    </list>
+    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="logged" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -121,7 +117,7 @@
       <workItem from="1743938779274" duration="791000" />
       <workItem from="1743939729217" duration="2072000" />
       <workItem from="1743943326061" duration="356000" />
-      <workItem from="1743954089530" duration="2641000" />
+      <workItem from="1743954089530" duration="2756000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -163,7 +159,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743940648083</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="logged">
+      <option name="closed" value="true" />
+      <created>1743957752975</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1743957752975</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -172,7 +176,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
     <MESSAGE value="html files" />
-    <option name="LAST_COMMIT_MESSAGE" value="html files" />
+    <MESSAGE value="logged" />
+    <option name="LAST_COMMIT_MESSAGE" value="logged" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
