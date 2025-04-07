@@ -35,17 +35,14 @@ class LoginFormStudent(forms.Form):
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        # Vérifie que les deux champs sont valides
-        if email and password:
-            student = Student.objects.filter(student_email=email).first()
+        if not email or not password:
+            return cleaned_data  # Laisse Django gérer les erreurs "champ requis"
 
-            # Vérifier si l'étudiant existe et si le mot de passe est correct
-            if student and check_password(password, student.password):
-                # Si un étudiant est trouvé et le mot de passe est correct, on continue
-                return cleaned_data
-            else:
-                raise forms.ValidationError("Adresse de courriel ou mot de passe erroné.")
-        return cleaned_data
+        student = Student.objects.filter(student_email=email).first()
+
+        if not student or not check_password(password, student.password):
+            print("Login failed for:", email)
+            raise forms.ValidationError("Adresse de courriel ou mot de passe erroné.")
 
 
 class AddStudentForm(forms.ModelForm):

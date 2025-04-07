@@ -23,10 +23,8 @@ def professeur_view(request):
 
 def get_logged_user_from_request(request):
     user_id = request.session.get('logged_user_id')
-
     if not user_id:
         return None
-
     # Recherche l'utilisateur avec l'ID
     user = None
     if Student.objects.filter(id=user_id).exists():
@@ -43,10 +41,10 @@ def get_logged_user_from_request(request):
 
 
 def welcome(request):
-    logged_user_id = request.session.get('logged_user_id')  # utilise .get() pour éviter KeyError
-    if logged_user_id:
-        logged_user = get_logged_user_from_request(request)
-        return render(request, 'welcome.html')
+    if 'logged_user_id' in request.session:
+        logged_user_id = request.session.get('logged_user_id')
+        logged_user = Educator.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
+        return render(request, 'welcome.html', {'logged_user': logged_user})
     else:
         return render(request, 'login.html')  # pas de slash initial ici
 
@@ -73,20 +71,15 @@ def login_etudiant(request):
     if request.method == "POST":
         form = LoginFormStudent(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            student = Student.objects.filter(student_email=email).first()
-
-            if student and check_password(password, student.password):
-                request.session['logged_user_id'] = student.id
-                return redirect('/welcome_etudiant')  # Redirige vers la page de bienvenue
-            else:
-                form.add_error(None, "Email ou mot de passe incorrect.")  # Ajoute un message d'erreur
-        return render(request, "login.etudiant.html", {'form': form})
-
+            user_email = form.cleaned_data['email']
+            logged_user = Student.objects.get(student_email=user_email)
+            request.session['logged_user_id'] = logged_user.id
+            return redirect('/welcome_etudiant')#Redirige vers la page de bienvenue
+        else:
+            return render(request, "login.etudiant.html", {'form': form})
     else:
-        form = LoginFormStudent()  # Crée un formulaire vide pour GET
-        return render(request, "login.etudiant.html", {'form': form})
+            form = LoginForm(request.POST)
+            return render(request, "login.etudiant.html", {'form': form})
 
 
 def login_professeur(request):
@@ -117,10 +110,11 @@ def add_student_views(request):
     return render(request, 'welcome/add_student.html', {'form': form})
 
 
+
 def welcome_etudiant(request):
-    logged_user_id = request.session.get('logged_user_id')  # utilise .get() pour éviter KeyError
-    if logged_user_id:
-        logged_user = get_logged_user_from_request(request)
-        return render(request, 'welcome_etudiant.html')
+    if 'logged_user_id' in request.session:
+        logged_user_id = request.session.get('logged_user_id')
+        logged_user = Student.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
+        return render(request, 'welcome_etudiant.html', {'logged_user': logged_user})
     else:
         return render(request, 'login.etudiant.html')  # pas de slash initial ici
