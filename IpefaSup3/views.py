@@ -1,8 +1,6 @@
-import re
-from django.core.exceptions import ValidationError
-from django.shortcuts import render, redirect
-from .forms import LoginForm, AddStudentForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import  redirect
+from .forms import LoginForm, AddStudentForm, LoginFormStudent
 from .models import Educator, Student, Teacher  # Assure-toi d'importer ton modèle Educator
 
 
@@ -71,24 +69,24 @@ def login(request):
         return render(request, "login.html", {'form':form})
 
 
-
-
-
 def login_etudiant(request):
-    if len(request.POST)>0:
-        form = LoginForm(request.POST)
+    if request.method == "POST":
+        form = LoginFormStudent(request.POST)
         if form.is_valid():
-            user_email = form.cleaned_data['email']
-            logged_user = Student.objects.filter(student_email=user_email).first()
-            request.session['logged_user_id'] = logged_user.id
-            return redirect('/welcome/etudiant')
-        else:
-            return render(request, "login.etudiant.html", {'form':form})
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            student = Student.objects.filter(student_email=email).first()
+
+            if student and check_password(password, student.password):
+                request.session['logged_user_id'] = student.id
+                return redirect('/welcome_etudiant')  # Redirige vers la page de bienvenue
+            else:
+                form.add_error(None, "Email ou mot de passe incorrect.")  # Ajoute un message d'erreur
+        return render(request, "login.etudiant.html", {'form': form})
+
     else:
-        form = LoginForm(request.POST)
-        return render(request, "login.etudiant.html", {'form':form})
-
-
+        form = LoginFormStudent()  # Crée un formulaire vide pour GET
+        return render(request, "login.etudiant.html", {'form': form})
 
 
 def login_professeur(request):
@@ -119,5 +117,10 @@ def add_student_views(request):
     return render(request, 'welcome/add_student.html', {'form': form})
 
 
-
-
+def welcome_etudiant(request):
+    logged_user_id = request.session.get('logged_user_id')  # utilise .get() pour éviter KeyError
+    if logged_user_id:
+        logged_user = get_logged_user_from_request(request)
+        return render(request, 'welcome_etudiant.html')
+    else:
+        return render(request, 'login.etudiant.html')  # pas de slash initial ici

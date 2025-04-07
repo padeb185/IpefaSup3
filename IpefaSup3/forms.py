@@ -2,9 +2,8 @@ from itertools import chain
 from django import forms
 from .models import Person, Educator, Employee, Teacher, Student
 from django.db.models import Q
-from django.contrib.auth.hashers import make_password
-from .utils import validate_efpl_email
-
+from django.contrib.auth.hashers import make_password, check_password
+from .utils import validate_efpl_email, validate_efpl_student_email
 
 
 class LoginForm(forms.Form):
@@ -26,6 +25,28 @@ class LoginForm(forms.Form):
             if len(result) != 1:
                 raise forms.ValidationError("Adresse de courriel ou mot de passe erroné.")
         return cleaned_data
+
+class LoginFormStudent(forms.Form):
+    email = forms.EmailField(label="Courriel", required=True, validators=[validate_efpl_student_email])
+    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput, required=True)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
+
+        # Vérifie que les deux champs sont valides
+        if email and password:
+            student = Student.objects.filter(student_email=email).first()
+
+            # Vérifier si l'étudiant existe et si le mot de passe est correct
+            if student and check_password(password, student.password):
+                # Si un étudiant est trouvé et le mot de passe est correct, on continue
+                return cleaned_data
+            else:
+                raise forms.ValidationError("Adresse de courriel ou mot de passe erroné.")
+        return cleaned_data
+
 
 class AddStudentForm(forms.ModelForm):
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)

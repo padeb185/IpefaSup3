@@ -15,35 +15,35 @@
   {% endif %}
   
   <p>
-      <label for="email">E-mail :</label>
-      <input name="email" id="email" size="30" type="email" required>
+    <label for="email">E-mail :</label>
+    <input name="email" id="email" size="30" type="email" required>
+    <span id="emailError" style="color: red;"></span>  <!-- ← ici -->
   </p>
-  
+
   <p>
-      <label for="password">Mot de passe :</label>
-      <input type="submit" id="submit-btn" value="Se connecter" disabled />
+    <label for="password">Mot de passe :</label>
+    <input name="password" id="password" size="30" type="password" required>
+  </p>
+
+  <p>
+    <input type="submit" value="Se connecter" />
   </p>
 </form>
 
-<!-- Script de validation pour étudiant -->
 <script>
-    const emailInput = document.getElementById("email");
-    const errorSpan = document.getElementById("email-error");
-    const submitBtn = document.getElementById("submit-btn");
+    document.getElementById("email").addEventListener("input", function () {
+        const email = this.value;
+        const errorSpan = document.getElementById("emailError");  // Corrected ID
 
-    emailInput.addEventListener("input", function () {
-        const email = emailInput.value;
+        // Vérifie le format prénom.nom@student.efpl.be
         const regex = /^[a-zA-Z]+\.[a-zA-Z]+@student\.efpl\.be$/;
 
         if (email === "") {
             errorSpan.textContent = "";
-            submitBtn.disabled = true;
         } else if (!regex.test(email)) {
             errorSpan.textContent = "L'adresse email doit être au format prénom.nom@student.efpl.be";
-            submitBtn.disabled = true;
         } else {
             errorSpan.textContent = "";
-            submitBtn.disabled = false;
         }
     });
 </script>

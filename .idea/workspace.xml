@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="login etudiant">
-      <change afterPath="$PROJECT_DIR$/IpefaSup3/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IpefaSup3/static/img/favicon.ico" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IpefaSup3/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IpefaSup3/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IpefaSup3/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login.etudiant.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.etudiant.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +24,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -60,7 +62,7 @@
     &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/pierr/PycharmProjects/IpefaSup3/IpefaSup3&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/pierr/PycharmProjects/IpefaSup3/IpefaSup3/static/img&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -72,6 +74,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\IpefaSup3\static\img" />
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\IpefaSup3" />
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates" />
     </key>
@@ -124,7 +127,12 @@
       <workItem from="1743939729217" duration="2072000" />
       <workItem from="1743943326061" duration="356000" />
       <workItem from="1743954089530" duration="2756000" />
-      <workItem from="1744019684477" duration="2258000" />
+      <workItem from="1744019684477" duration="2460000" />
+      <workItem from="1744025822038" duration="2616000" />
+      <workItem from="1744028675505" duration="618000" />
+      <workItem from="1744029322218" duration="592000" />
+      <workItem from="1744030931136" duration="844000" />
+      <workItem from="1744032044955" duration="61000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -206,7 +214,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744022357598</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="login etudiant">
+      <option name="closed" value="true" />
+      <created>1744022875798</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1744022875798</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
