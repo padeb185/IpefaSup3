@@ -28,4 +28,21 @@
     <input type="submit" value="Se connecter" />
   </p>
 </form>
+<script>
+    document.getElementById("email").addEventListener("input", function () {
+        const email = this.value;
+        const errorSpan = document.getElementById("email-error");
+
+        // Vérifie le format prénom.nom@efpl.be
+        const regex = /^[a-zA-Z]+\.[a-zA-Z]+@efpl\.be$/;
+
+        if (email === "") {
+            errorSpan.textContent = "";
+        } else if (!regex.test(email)) {
+            errorSpan.textContent = "L'adresse email doit être au format prénom.nom@efpl.be";
+        } else {
+            errorSpan.textContent = "";
+        }
+    });
+</script>
 {% endblock %}

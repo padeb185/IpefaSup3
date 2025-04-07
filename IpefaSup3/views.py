@@ -1,3 +1,6 @@
+from typing import re
+
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from .forms import LoginForm, AddStudentForm
 from django.contrib.auth.decorators import login_required
@@ -115,3 +118,7 @@ def add_student_views(request):
         form = AddStudentForm()  # Initialisation propre du formulaire
 
     return render(request, 'welcome/add_student.html', {'form': form})
+
+def validate_efpl_email(value):
+    if not re.match(r'^[a-zA-Z]+\.[a-zA-Z]+@efpl\.be$', value):
+        raise ValidationError("Email doit être au format prénom.nom@efpl.be")
