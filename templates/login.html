@@ -8,24 +8,41 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
-<form action="{% url 'login' %}" method="post">
+<form action="{% url 'login' %}" method="post" onsubmit="return validateEmail()">
   {% csrf_token %}
   {% if error %}
   <p class="error">{{ error }}</p>
   {% endif %}
-  
+
   <p>
       <label for="email">E-mail :</label>
       <input name="email" id="email" size="30" type="email" required>
   </p>
-  
+
   <p>
       <label for="password">Mot de passe :</label>
       <input name="password" id="password" size="30" type="password" required>
   </p>
-  
+
   <p>
     <input type="submit" value="Se connecter" />
   </p>
 </form>
+
+<script>
+  function validateEmail() {
+    const email = document.getElementById('email').value;
+    // Regex modifié pour accepter les caractères accentués
+    const emailPattern1 = /^[a-zA-Zàáâäãåąèéêëìíîïłòóôöõøùúûüýÿźżż0-9._-]+@efpl\.be$/;
+    const emailPattern2 = /^[a-zA-Zàáâäãåąèéêëìíîïłòóôöõøùúûüýÿźżż0-9._-]+@student\.efpl\.be$/;
+
+    // Vérifier si l'email correspond à l'un des deux formats
+    if (!emailPattern1.test(email) && !emailPattern2.test(email)) {
+      alert("L'adresse e-mail doit être au format nom.prenom@efpl.be ou nom.prenom@student.efpl.be.");
+      return false; // Empêche l'envoi du formulaire
+    }
+    return true; // Permet l'envoi du formulaire
+  }
+</script>
+
 {% endblock %}

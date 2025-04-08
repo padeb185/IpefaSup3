@@ -2,7 +2,7 @@ from datetime import datetime
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from .forms import LoginForm, AddStudentForm, AddTeacherForm
+from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorForm
 from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
 
 
@@ -79,20 +79,33 @@ def login(request):
                 if Teacher.objects.filter(employee_email=user_email).exists():
                     logged_user = Teacher.objects.get(employee_email=user_email)
                     request.session['logged_user_id'] = logged_user.id
-                    return render(request, 'welcome_teacher.html')  # Page pour le professeur
+                    return render(request, 'welcome_teacher.html', {
+                        'logged_user': logged_user,
+                        'current_date_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    })  # # Page pour le professeur
                 elif Educator.objects.filter(employee_email=user_email).exists():
                     logged_user = Educator.objects.get(employee_email=user_email)
                     request.session['logged_user_id'] = logged_user.id
-                    return render(request,  'welcome.html')  # Page pour l'éducateur
+                    return render(request,  'welcome.html', {
+                        'logged_user': logged_user,
+                        'current_date_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    })# Page pour l'éducateur
                 elif Administrator.objects.filter(employee_email=user_email).exists():
                     logged_user = Administrator.objects.get(employee_email=user_email)
                     request.session['logged_user_id'] = logged_user.id
-                    return render(request, 'welcome_administrator.html')  # Page pour l'administrateur
+                    return render(request, 'welcome_administrator.html', {
+                        'logged_user': logged_user,
+                        'current_date_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    })  #
+                    # Page pour l'administrateur
                 # Cherche dans le modèle Student
                 elif Student.objects.filter(studentMail=user_email).exists():
                     logged_user = Student.objects.get(studentMail=user_email)
                     request.session['logged_user_id'] = logged_user.id
-                    return render(request, 'welcome_student.html')  # Page pour l'étudiant
+                    return render(request, 'welcome_student.html', {
+                        'logged_user': logged_user,
+                        'current_date_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    })  # # Page pour l'étudiant
                 else:
                     return HttpResponse("Utilisateur non trouvé", status=404)  # Utilisateur non trouvé
             except Exception as e:
@@ -123,10 +136,22 @@ def add_teacher_views(request):
         form = AddTeacherForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/welcome')  # Redirection après ajout réussi
+            return redirect('/welcome_administrator')  # Redirection après ajout réussi
     else:
         form = AddTeacherForm()  # Initialisation propre du formulaire
 
     return render(request, 'welcome_administrator/add_teacher.html', {'form': form})
+
+
+def add_administrator_views(request):
+    if request.method == "POST":
+        form = AddAdministratorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/welcome_administrator')  # Redirection après ajout réussi
+    else:
+        form = AddAdministratorForm()  # Initialisation propre du formulaire
+
+    return render(request, 'welcome_administrator/add_administrator.html', {'form': form})
 
 

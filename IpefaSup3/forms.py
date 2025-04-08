@@ -15,17 +15,39 @@ class LoginForm(forms.Form):
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        # Vérifie que les deux champs sont valides
         if email and password:
-            educator_queryset = Educator.objects.filter(Q(password=password) & Q(employee_email=email))
-            teacher_queryset = Teacher.objects.filter(Q(password=password) & Q(employee_email=email))
-            administrator_queryset = Administrator.objects.filter(Q(password=password) & Q(employee_email=email))
-            student_queryset = Student.objects.filter(Q(password=password) & Q(studentMail=email))
+            user = None
 
-            # Combinez les résultats avec `chain`
-            result = list(chain(educator_queryset, teacher_queryset, administrator_queryset, student_queryset))
-            if len(result) != 1:
+            # Recherche dans Educator
+            for educator in Educator.objects.filter(employee_email=email):
+                if check_password(password, educator.password):
+                    user = educator
+                    break
+
+            # Recherche dans Teacher
+            if not user:
+                for teacher in Teacher.objects.filter(employee_email=email):
+                    if check_password(password, teacher.password):
+                        user = teacher
+                        break
+
+            # Recherche dans Administrator
+            if not user:
+                for admin in Administrator.objects.filter(employee_email=email):
+                    if check_password(password, admin.password):
+                        user = admin
+                        break
+
+            # Recherche dans Student
+            if not user:
+                for student in Student.objects.filter(studentMail=email):
+                    if check_password(password, student.password):
+                        user = student
+                        break
+
+            if not user:
                 raise forms.ValidationError("Adresse de courriel ou mot de passe erroné.")
+
         return cleaned_data
 
 
@@ -76,4 +98,27 @@ class AddTeacherForm(forms.ModelForm):
             teacher.save()
         return teacher
 
+
+class AddAdministratorForm(forms.ModelForm):
+    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
+    password_confirm = forms.CharField(label="Confirmer le mot de passe", widget=forms.PasswordInput)
+
+    class Meta:
+        model = Administrator
+        exclude = {}
+    def clean(self):
+        cleaned_data = super(AddAdministratorForm, self).clean()
+        password = cleaned_data.get("password")
+        password_confirm = cleaned_data.get("password_confirm")
+        if password and password_confirm and password != password_confirm:
+            raise forms.ValidationError("Les mots de passe ne corespondent pas")
+        return cleaned_data
+
+    def save(self, commit=True):
+        administrator = super().save(commit=False)
+        if self.cleaned_data["password"]:
+            administrator.password = make_password(self.cleaned_data["password"])
+        if commit:
+            administrator.save()
+        return administrator
 

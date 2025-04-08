@@ -19,7 +19,7 @@ from django.contrib.auth import login
 from django.contrib import admin
 from django.urls import path
 from IpefaSup3.views import login, welcome, add_student_views, welcome_teacher, welcome_administrator, welcome_student, \
-    add_teacher_views
+    add_teacher_views, add_administrator_views
 
 urlpatterns = [
     path('', login, name='login'),
@@ -32,5 +32,6 @@ urlpatterns = [
     path('welcome_student/', welcome_student, name='welcome_student'),  # Page
     path('welcome/add_student/', add_student_views, name='add_student'),
     path('welcome_administrator/addteacher/', add_teacher_views, name='add_teacher'),
+    path('welcome_administrator/addadministrator/', add_administrator_views, name='add_administrator'),
     path('admin/', admin.site.urls),
 ]
