@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="login etudiant">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.etudiant.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.etudiant.html" afterDir="false" />
-    </list>
+    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="login etudiant" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -133,6 +127,7 @@
       <workItem from="1744032044955" duration="147000" />
       <workItem from="1744038655929" duration="1329000" />
       <workItem from="1744040037644" duration="2080000" />
+      <workItem from="1744042565653" duration="651000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -238,7 +233,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744038755599</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="login etudiant">
+      <option name="closed" value="true" />
+      <created>1744043377323</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1744043377323</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
