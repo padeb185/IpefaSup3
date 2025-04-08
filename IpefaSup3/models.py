@@ -16,10 +16,9 @@ class Person(models.Model):
     private_email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
 
+
     class Meta:
-        abstract = True  # Empêche la création d'une table Person
-
-
+        abstract = True  # Empêche la création de la table Employee
 
 
 
@@ -27,9 +26,9 @@ class Employee(Person):
     employee_email = models.EmailField(unique=True)
     matricule = models.CharField(max_length=255)
 
+
     class Meta:
         abstract = True  # Empêche la création de la table Employee
-
 
 
 

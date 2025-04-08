@@ -18,25 +18,17 @@ from django.contrib import admin
 from django.contrib.auth import login
 from django.contrib import admin
 from django.urls import path
-from IpefaSup3.views import accueil, etudiant_view, educateur_view, professeur_view, login, welcome, add_student_views, \
-    login_etudiant, login_professeur, welcome_etudiant
+from IpefaSup3.views import login, welcome, add_student_views, welcome_teacher, welcome_administrator, welcome_student
 
 urlpatterns = [
-    path('', accueil, name='accueil'),
-
-    path('etudiant/', etudiant_view, name='etudiant'),
-
-    path('educateur/', educateur_view, name='educateur'),
-
-    path('professeur/', professeur_view, name='professeur'),
-
+    path('', login, name='login'),
     path("login/", login, name="login"),
-    path("login.etudiant/", login_etudiant, name="login.etudiant"),
-    path("login.professeur/", login_professeur, name="login.professeur"),
     path("welcome/", welcome, name="welcome"),
-    path('welcome_etudiant', welcome_etudiant, name='welcome_etudiant'),
-
-
+    #path('welcome_etudiant', welcome_etudiant, name='welcome_etudiant'),
+    path('welcome_teacher/', welcome_teacher, name='welcome_teacher'),  # Page pour le professeur
+  # Page pour l'éducateur
+    path('welcome_administrator/', welcome_administrator, name='welcome_administrator'),  # Page pour l'administrateur
+    path('welcome_student/', welcome_student, name='welcome_student'),  # Page
     path('welcome/add_student/', add_student_views, name='add_student'),
 
     path('admin/', admin.site.urls),
