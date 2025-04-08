@@ -2,7 +2,7 @@ from datetime import datetime
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from .forms import LoginForm, AddStudentForm
+from .forms import LoginForm, AddStudentForm, AddTeacherForm
 from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
 
 
@@ -33,7 +33,7 @@ def welcome(request):
     if 'logged_user_id' in request.session:
         logged_user_id = request.session.get('logged_user_id')
         logged_user = Educator.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
-        return render(request, 'welcome.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
+        return render(request, 'login/../templates/welcome.html', {'logged_user': logged_user, 'current_date_time': datetime.now()})
     else:
         return render(request, 'login.html')  # pas de slash initial ici
 
@@ -87,7 +87,7 @@ def login(request):
                 elif Educator.objects.filter(employee_email=user_email).exists():
                     logged_user = Educator.objects.get(employee_email=user_email)
                     request.session['logged_user_id'] = logged_user.id
-                    return render(request, 'welcome.html')  # Page pour l'éducateur
+                    return render(request,  'welcome.html')  # Page pour l'éducateur
                 elif Administrator.objects.filter(employee_email=user_email).exists():
                     logged_user = Administrator.objects.get(employee_email=user_email)
                     request.session['logged_user_id'] = logged_user.id
@@ -122,5 +122,15 @@ def add_student_views(request):
 
     return render(request, 'welcome/add_student.html', {'form': form})
 
+def add_teacher_views(request):
+    if request.method == "POST":
+        form = AddTeacherForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/welcome')  # Redirection après ajout réussi
+    else:
+        form = AddTeacherForm()  # Initialisation propre du formulaire
+
+    return render(request, 'welcome_administrator/add_teacher.html', {'form': form})
 
 

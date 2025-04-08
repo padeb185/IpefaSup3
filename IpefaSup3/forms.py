@@ -53,5 +53,27 @@ class AddStudentForm(forms.ModelForm):
             student.save()
         return student
 
+class AddTeacherForm(forms.ModelForm):
+    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
+    password_confirm = forms.CharField(label="Confirmer le mot de passe", widget=forms.PasswordInput)
+
+    class Meta:
+        model = Teacher
+        exclude = {}
+    def clean(self):
+        cleaned_data = super(AddTeacherForm, self).clean()
+        password = cleaned_data.get("password")
+        password_confirm = cleaned_data.get("password_confirm")
+        if password and password_confirm and password != password_confirm:
+            raise forms.ValidationError("Les mots de passe ne corespondent pas")
+        return cleaned_data
+
+    def save(self, commit=True):
+        teacher = super().save(commit=False)
+        if self.cleaned_data["password"]:
+            teacher.password = make_password(self.cleaned_data["password"])
+        if commit:
+            teacher.save()
+        return teacher
 
 

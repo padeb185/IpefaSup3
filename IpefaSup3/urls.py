@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.contrib.auth import login
 from django.contrib import admin
 from django.urls import path
-from IpefaSup3.views import login, welcome, add_student_views, welcome_teacher, welcome_administrator, welcome_student
+from IpefaSup3.views import login, welcome, add_student_views, welcome_teacher, welcome_administrator, welcome_student, \
+    add_teacher_views
 
 urlpatterns = [
     path('', login, name='login'),
@@ -30,6 +31,6 @@ urlpatterns = [
     path('welcome_administrator/', welcome_administrator, name='welcome_administrator'),  # Page pour l'administrateur
     path('welcome_student/', welcome_student, name='welcome_student'),  # Page
     path('welcome/add_student/', add_student_views, name='add_student'),
-
+    path('welcome_administrator/addteacher/', add_teacher_views, name='add_teacher'),
     path('admin/', admin.site.urls),
 ]
