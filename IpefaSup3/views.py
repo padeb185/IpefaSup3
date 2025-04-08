@@ -1,35 +1,16 @@
 from datetime import datetime
-
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from .forms import LoginForm, AddStudentForm, LoginFormStudent
+from .forms import LoginForm, AddStudentForm
 from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
-def student_dashboard(request):
-    student = request.user  # supposons que Student hérite de User ou soit lié via OneToOne
-    return render(request, 'student_dashboard.html', {'student': student})
+
 
 
 # views.py
 from django.shortcuts import render
-
-def accueil(request):
-    return render(request, 'accueil.html')
-
-def etudiant_view(request):
-    return render(request, 'etudiant.html')
-
-def educateur_view(request):
-    return render(request, 'educateur.html')
-
-def professeur_view(request):
-    return render(request, 'professeur.html')
-
 
 
 def get_logged_user_from_request(request):
@@ -52,7 +33,7 @@ def welcome(request):
     if 'logged_user_id' in request.session:
         logged_user_id = request.session.get('logged_user_id')
         logged_user = Educator.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
-        return render(request, 'welcome.html', {'logged_user': logged_user, 'current_date_time': datetime.now} )
+        return render(request, 'welcome.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
     else:
         return render(request, 'login.html')  # pas de slash initial ici
 
@@ -62,7 +43,7 @@ def welcome_student(request):
     if 'logged_user_id' in request.session:
         logged_user_id = request.session.get('logged_user_id')
         logged_user = Student.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
-        return render(request, 'welcome_student.html', {'logged_user': logged_user, 'current_date_time': datetime.now} )
+        return render(request, 'welcome_student.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
     else:
         return render(request, 'login.html')  # pas de slash initial ici
 
@@ -72,7 +53,7 @@ def welcome_teacher(request):
     if 'logged_user_id' in request.session:
         logged_user_id = request.session.get('logged_user_id')
         logged_user = Teacher.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
-        return render(request, 'welcome_teacher.html', {'logged_user': logged_user, 'current_date_time': datetime.now} )
+        return render(request, 'welcome_teacher.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
     else:
         return render(request, 'login.html')  # pas de slash initial ici
 
@@ -82,7 +63,7 @@ def welcome_administrator(request):
     if 'logged_user_id' in request.session:
         logged_user_id = request.session.get('logged_user_id')
         logged_user = Administrator.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
-        return render(request, 'welcome_administrator.html', {'logged_user': logged_user, 'current_date_time': datetime.now} )
+        return render(request, 'welcome_administrator.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
     else:
         return render(request, 'login.html')  # pas de slash initial ici
 

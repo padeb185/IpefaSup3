@@ -1,6 +1,6 @@
 from itertools import chain
 from django import forms
-from .models import Person, Educator, Employee, Teacher, Student
+from .models import Person, Educator, Employee, Teacher, Student, Administrator
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password, check_password
 from .utils import validate_efpl_email, validate_efpl_student_email
@@ -19,30 +19,15 @@ class LoginForm(forms.Form):
         if email and password:
             educator_queryset = Educator.objects.filter(Q(password=password) & Q(employee_email=email))
             teacher_queryset = Teacher.objects.filter(Q(password=password) & Q(employee_email=email))
+            administrator_queryset = Administrator.objects.filter(Q(password=password) & Q(employee_email=email))
+            student_queryset = Student.objects.filter(Q(password=password) & Q(studentMail=email))
 
             # Combinez les résultats avec `chain`
-            result = list(chain(educator_queryset, teacher_queryset))
+            result = list(chain(educator_queryset, teacher_queryset, administrator_queryset, student_queryset))
             if len(result) != 1:
                 raise forms.ValidationError("Adresse de courriel ou mot de passe erroné.")
         return cleaned_data
 
-class LoginFormStudent(forms.Form):
-    email = forms.EmailField(label="Courriel", required=True, validators=[validate_efpl_student_email])
-    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput, required=True)
-
-    def clean(self):
-        cleaned_data = super().clean()
-        email = cleaned_data.get("email")
-        password = cleaned_data.get("password")
-
-        if not email or not password:
-            return cleaned_data  # Laisse Django gérer les erreurs "champ requis"
-
-        student = Student.objects.filter(student_email=email).first()
-
-        if not student or not check_password(password, student.password):
-            print("Login failed for:", email)
-            raise forms.ValidationError("Adresse de courriel ou mot de passe erroné.")
 
 
 class AddStudentForm(forms.ModelForm):
