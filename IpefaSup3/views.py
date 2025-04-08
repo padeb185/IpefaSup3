@@ -30,19 +30,17 @@ def get_logged_user_from_request(request):
 
 
 def welcome(request):
-    if 'logged_user_id' in request.session:
-        logged_user_id = request.session.get('logged_user_id')
-        logged_user = Educator.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
-        return render(request, 'login/../templates/welcome.html', {'logged_user': logged_user, 'current_date_time': datetime.now()})
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        return render(request, 'welcome.html', {'logged_user': logged_user, 'current_date_time': datetime.now()})
     else:
         return render(request, 'login.html')  # pas de slash initial ici
 
 
 
 def welcome_student(request):
-    if 'logged_user_id' in request.session:
-        logged_user_id = request.session.get('logged_user_id')
-        logged_user = Student.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
         return render(request, 'welcome_student.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
     else:
         return render(request, 'login.html')  # pas de slash initial ici
@@ -50,9 +48,8 @@ def welcome_student(request):
 
 
 def welcome_teacher(request):
-    if 'logged_user_id' in request.session:
-        logged_user_id = request.session.get('logged_user_id')
-        logged_user = Teacher.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
         return render(request, 'welcome_teacher.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
     else:
         return render(request, 'login.html')  # pas de slash initial ici
@@ -60,9 +57,8 @@ def welcome_teacher(request):
 
 
 def welcome_administrator(request):
-    if 'logged_user_id' in request.session:
-        logged_user_id = request.session.get('logged_user_id')
-        logged_user = Administrator.objects.get(id=logged_user_id)# utilise .get() pour éviter KeyError
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
         return render(request, 'welcome_administrator.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
     else:
         return render(request, 'login.html')  # pas de slash initial ici
