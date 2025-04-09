@@ -1,9 +1,18 @@
 from itertools import chain
 from django import forms
-from .models import Person, Educator, Employee, Teacher, Student, Administrator
+from django.http import request
+
+from .models import Person, Educator, Employee, Teacher, Student, Administrator, AcademicUE, UE
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password, check_password
-from .utils import validate_efpl_email, validate_efpl_student_email
+from .utils import validate_efpl_email, validate_efpl_student_email, get_logged_user_from_request
+
+
+def clean_email(self):
+    email = self.cleaned_data['email']
+    if not email.endswith('@student.efpl.be'):
+        raise forms.ValidationError("Email invalide.")
+    return email
 
 
 class LoginForm(forms.Form):
@@ -122,3 +131,72 @@ class AddAdministratorForm(forms.ModelForm):
             administrator.save()
         return administrator
 
+class AddAcademicUEForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # on récupère request si fourni
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            from .utils import get_logged_user_from_request
+            logged_user = get_logged_user_from_request(self.request)
+
+    class Meta:
+        model = AcademicUE
+        fields = '__all__'
+        exclude = {}
+
+
+class AddUEForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # on récupère request si fourni
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            from .utils import get_logged_user_from_request
+            logged_user = get_logged_user_from_request(self.request)
+
+    class Meta:
+        model = UE
+        fields = '__all__'
+        exclude = {}
+
+
+class StudentForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, required=False, label='Mot de passe')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=False, label='Confirmer le mot de passe')
+
+    def __init__(self, *args, **kwargs):
+        # Récupérer 'request' si fourni
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            from .utils import get_logged_user_from_request
+            logged_user = get_logged_user_from_request(self.request)
+            # Tu peux utiliser logged_user ici si nécessaire pour personnaliser le formulaire
+
+    class Meta:
+        model = Student
+        fields = '__all__'  # Corriger la syntaxe
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        # Vérifie si le mot de passe et la confirmation sont identiques
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError("Les mots de passe ne correspondent pas.")
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        cleaned_data = self.cleaned_data
+        password = cleaned_data.get('password')
+
+        # Si un mot de passe est fourni, le sécuriser
+        if password:
+            cleaned_data['password'] = make_password(password)  # Utiliser make_password pour sécuriser le mot de passe
+
+        # Sauvegarder l'objet Student avec les données nettoyées
+        return super().save(commit)  # Appelle la méthode save() de la classe parente

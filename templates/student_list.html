@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Lister les étudiants{% endblock %}
+
+{% block bodyId %}studentList{% endblock %}
+
+{% block content %}
+<h1>Liste des étudiants</h1>
+
+    <!-- Liens pour trier les étudiants -->
+    <p>
+        Trier par :
+        <a href="?sort_by=first_name">Prénom</a> |
+        <a href="?sort_by=last_name">Nom</a>
+    </p>
+
+    <ul>
+        {% for student in students %}
+            <li>
+                <!-- Lien cliquable pour modifier l'étudiant -->
+                <a href="{% url 'edit_student' student.id %}">{{ student.first_name }} {{ student.last_name }}</a>
+            </li>
+        {% empty %}
+            <li>Aucun étudiant trouvé.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

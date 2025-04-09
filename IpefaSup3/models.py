@@ -1,4 +1,21 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+import re
+
+
+
+
+
+
+
+
+def custom_email_validator(value):
+    pattern = r'^[a-zA-Z]+\.[a-zA-Z]+@(student\.)?efpl\.be$'
+    if not re.match(pattern, value):
+        raise ValidationError(
+            "L'adresse email doit être au format nom.prenom@efpl.be ou nom.prenom@student.efpl.be"
+        )
+
 
 class Person(models.Model):
     SEXE_CHOICES = [
@@ -14,7 +31,7 @@ class Person(models.Model):
     zip_code = models.CharField(max_length=10)
     city = models.CharField(max_length=100)
     private_email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128)
+    password = models.CharField(max_length=255)
 
 
     class Meta:
@@ -58,7 +75,7 @@ class Administrator(Employee):  # Hérite de Employee
 
 
 class Student(Person):  # Hérite de Person
-    studentMail = models.EmailField(unique=True)  # Email étudiant
+    studentMail = models.EmailField(validators=[custom_email_validator], unique=True)  # Email étudiant
     sessions = models.ManyToManyField('Session', related_name='students',
                                       blank=True)  # Relation ManyToMany avec Session
     academic_ues = models.ManyToManyField('AcademicUE', related_name='students',
@@ -134,7 +151,7 @@ class UE(models.Model):
     prerequisites = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='dependents')  # Relation récursive 0,N
 
     def __str__(self):
-        return f"{self.idUE} - {self.wording}"
+        return f"{self.idUE} - {self.wording} - {self.numberPeriods} - {self.section} - {self.prerequisites}"
 
 #Avec cette approche, tu peux récupérer :
 

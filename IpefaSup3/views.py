@@ -1,8 +1,9 @@
 from datetime import datetime
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse
-from django.shortcuts import redirect
-from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorForm
+from django.shortcuts import redirect, get_object_or_404
+from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorForm, AddAcademicUEForm, AddUEForm, \
+    StudentForm
 from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
 
 
@@ -12,21 +13,7 @@ from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'im
 # views.py
 from django.shortcuts import render
 
-
-def get_logged_user_from_request(request):
-    user_id = request.session.get('logged_user_id')
-    if not user_id:
-        return None
-    # Recherche l'utilisateur avec l'ID
-    user = None
-    if Student.objects.filter(id=user_id).exists():
-        user = Student.objects.get(id=user_id)
-    elif Teacher.objects.filter(id=user_id).exists():
-        user = Teacher.objects.get(id=user_id)
-    elif Educator.objects.filter(id=user_id).exists():
-        user = Educator.objects.get(id=user_id)
-
-    return user
+from .utils import get_logged_user_from_request
 
 
 def welcome(request):
@@ -121,15 +108,17 @@ def login(request):
 
 
 def add_student_views(request):
-    if request.method == "POST":
-        form = AddStudentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/welcome')  # Redirection après ajout réussi
-    else:
-        form = AddStudentForm()  # Initialisation propre du formulaire
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        if request.method == "POST":
+            form = AddStudentForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('/welcome')  # Redirection après ajout réussi
+        else:
+            form = AddStudentForm()  # Initialisation propre du formulaire
 
-    return render(request, 'welcome/add_student.html', {'form': form})
+        return render(request, 'welcome/add_student.html', {'form': form})
 
 def add_teacher_views(request):
     if request.method == "POST":
@@ -154,4 +143,54 @@ def add_administrator_views(request):
 
     return render(request, 'welcome_administrator/add_administrator.html', {'form': form})
 
+def add_academic_ue_views(request):
+    if request.method == 'POST':
+        form = AddAcademicUEForm(request.POST)
+        if form.is_valid():
+            form.save()  # Sauvegarde les données si le formulaire est valide
+            # Rediriger ou renvoyer une réponse après soumission
+    else:
+        form = AddAcademicUEForm()  # Crée une nouvelle instance du formulaire
 
+    return render(request, 'welcome_administrator/add_academic_ue.html', {'form': form})
+
+def add_ue_views(request):
+    if request.method == 'POST':
+        form = AddUEForm(request.POST)
+        if form.is_valid():
+            form.save()  # Sauvegarde les données si le formulaire est valide
+            # Rediriger ou renvoyer une réponse après soumission
+    else:
+        form = AddUEForm()  # Crée une nouvelle instance du formulaire
+
+    return render(request, 'welcome_administrator/add_ue.html', {'form': form})
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Student
+from .forms import StudentForm
+
+def student_list(request):
+    sort_by = request.GET.get('sort_by', None)
+
+    if sort_by == 'first_name':
+        students = Student.objects.all().order_by('first_name')
+    elif sort_by == 'last_name':
+        students = Student.objects.all().order_by('last_name')
+    else:
+        students = Student.objects.all()
+
+    return render(request, 'student_list.html', {'students': students})
+
+def edit_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+
+    if request.method == 'POST':
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()  # Sauvegarder les modifications de l'étudiant
+            return redirect('student_list')  # Rediriger vers la liste après la mise à jour
+    else:
+        form = StudentForm(instance=student)
+
+    return render(request, 'edit_student.html', {'form': form, 'student': student})
