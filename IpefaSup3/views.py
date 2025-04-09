@@ -166,9 +166,7 @@ def add_ue_views(request):
     return render(request, 'welcome_administrator/add_ue.html', {'form': form})
 
 
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Student
-from .forms import StudentForm
+
 
 def student_list(request):
     sort_by = request.GET.get('sort_by', None)

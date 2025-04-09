@@ -27,7 +27,7 @@ urlpatterns = [
     path("welcome/", welcome, name="welcome"),
     #path('welcome_etudiant', welcome_etudiant, name='welcome_etudiant'),
     path('welcome_teacher/', welcome_teacher, name='welcome_teacher'),  # Page pour le professeur
-  # Page pour l'éducateur
+
     path('welcome_administrator/', welcome_administrator, name='welcome_administrator'),  # Page pour l'administrateur
     path('welcome_student/', welcome_student, name='welcome_student'),  # Page
     path('welcome/add_student/', add_student_views, name='add_student'),
