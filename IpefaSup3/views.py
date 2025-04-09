@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorForm, AddAcademicUEForm, AddUEForm, \
-    StudentForm
+    StudentForm, AddEducatorForm
 from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
 
 
@@ -119,6 +119,20 @@ def add_student_views(request):
             form = AddStudentForm()  # Initialisation propre du formulaire
 
         return render(request, 'welcome/add_student.html', {'form': form})
+
+def add_educator_views(request):
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        if request.method == "POST":
+            form = AddEducatorForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('/welcome')  # Redirection après ajout réussi
+        else:
+            form = AddEducatorForm()  # Initialisation propre du formulaire
+
+        return render(request, 'welcome_administrator/add_educator.html', {'form': form})
+
 
 def add_teacher_views(request):
     if request.method == "POST":
