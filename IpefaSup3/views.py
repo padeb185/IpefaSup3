@@ -218,3 +218,17 @@ def edit_student(request, student_id):
             form = StudentForm(instance=student)
 
         return render(request, 'edit_student.html', {'form': form, 'student': student,'logged_user': logged_user, 'current_date_time': datetime.now})
+
+def teacher_list(request):
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        sort_by = request.GET.get('sort_by', None)
+
+        if sort_by == 'first_name':
+            teachers = Teacher.objects.all().order_by('first_name')
+        elif sort_by == 'last_name':
+            teachers = Teacher.objects.all().order_by('last_name')
+        else:
+            teachers = Teacher.objects.all()
+
+        return render(request, 'teacher_list.html', {'teachers': teachers, 'logged_user': logged_user, 'current_date_time': datetime.now})
