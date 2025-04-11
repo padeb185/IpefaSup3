@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="teacher_list">
-      <change afterPath="$PROJECT_DIR$/templates/welcome_administrator/edit_teacher.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/welcome_administrator/teacher_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/views.py" afterDir="false" />
+    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="teacher_edit">
+      <change beforePath="$PROJECT_DIR$/templates/welcome_administrator.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/welcome_administrator/edit_teacher.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator/edit_teacher.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +157,7 @@
       <workItem from="1744368362323" duration="1291000" />
       <workItem from="1744369790715" duration="1052000" />
       <workItem from="1744370987938" duration="398000" />
-      <workItem from="1744373701453" duration="1264000" />
+      <workItem from="1744373701453" duration="1573000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -449,7 +447,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744374191306</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="teacher_edit">
+      <option name="closed" value="true" />
+      <created>1744374996447</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1744374996447</updated>
+    </task>
+    <task id="LOCAL-00038" summary="teacher_edit">
+      <option name="closed" value="true" />
+      <created>1744375146921</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1744375146921</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -467,6 +481,7 @@
     <MESSAGE value="educator" />
     <MESSAGE value="admin clean" />
     <MESSAGE value="teacher_list" />
-    <option name="LAST_COMMIT_MESSAGE" value="teacher_list" />
+    <MESSAGE value="teacher_edit" />
+    <option name="LAST_COMMIT_MESSAGE" value="teacher_edit" />
   </component>
 </project>
