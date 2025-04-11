@@ -209,23 +209,21 @@ class AddEducatorForm(forms.ModelForm):
 
 
 class AddAcademicUEForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)  # On récupère `request` si fourni
         super().__init__(*args, **kwargs)
 
         if self.request:
-            from .utils import get_logged_user_from_request
             logged_user = get_logged_user_from_request(self.request)
 
             # Vérification que l'utilisateur est bien un administrateur
             if not logged_user or not isinstance(logged_user, Administrator):
                 # Si l'utilisateur n'est pas un administrateur, on peut lever une exception ou rediriger
                 raise PermissionError("Accès réservé uniquement aux administrateurs")
+
     class Meta:
         model = AcademicUE
-        fields = '__all__'
-        exclude = {}
+        fields = '__all__'  # Pas besoin de `exclude = {}` si on utilise `fields = '__all__'`
 
 
 class AddUEForm(forms.ModelForm):

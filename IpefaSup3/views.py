@@ -159,7 +159,7 @@ def add_administrator_views(request):
         else:
             form = AddAdministratorForm()  # Initialisation propre du formulaire
 
-        return render(request, 'welcome_administrator/add_administrator.html', {'form': form })
+        return render(request, 'welcome_administrator/add_administrator.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def add_academic_ue_views(request):
     logged_user = get_logged_user_from_request(request)
@@ -172,7 +172,7 @@ def add_academic_ue_views(request):
         else:
             form = AddAcademicUEForm()  # Crée une nouvelle instance du formulaire
 
-    return render(request, 'welcome_administrator/add_academic_ue.html', {'form': form})
+    return render(request, 'welcome_administrator/add_academic_ue.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def add_ue_views(request):
     logged_user = get_logged_user_from_request(request)
@@ -185,7 +185,7 @@ def add_ue_views(request):
         else:
             form = AddUEForm()  # Crée une nouvelle instance du formulaire
 
-        return render(request, 'welcome_administrator/add_ue.html', {'form': form})
+        return render(request, 'welcome_administrator/add_ue.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 
 
@@ -202,7 +202,7 @@ def student_list(request):
         else:
             students = Student.objects.all()
 
-        return render(request, 'student_list.html', {'students': students})
+        return render(request, 'student_list.html', {'students': students, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def edit_student(request, student_id):
     logged_user = get_logged_user_from_request(request)
@@ -217,4 +217,4 @@ def edit_student(request, student_id):
         else:
             form = StudentForm(instance=student)
 
-        return render(request, 'edit_student.html', {'form': form, 'student': student})
+        return render(request, 'edit_student.html', {'form': form, 'student': student,'logged_user': logged_user, 'current_date_time': datetime.now})
