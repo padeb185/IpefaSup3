@@ -6,9 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="educator">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IpefaSup3/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accueil.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/edit_student.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/edit_student.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/professeur.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/student_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/welcome.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/welcome_administrator.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/welcome_administrator/add_academic_ue.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator/add_academic_ue.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/welcome_student.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_student.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/welcome_teacher.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_teacher.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,6 +164,7 @@
       <workItem from="1744201164588" duration="6750000" />
       <workItem from="1744207991702" duration="1705000" />
       <workItem from="1744279218604" duration="1548000" />
+      <workItem from="1744364285810" duration="1533000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -388,7 +398,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744210394530</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="educator">
+      <option name="closed" value="true" />
+      <created>1744364418161</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1744364418161</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -1,11 +1,12 @@
-from itertools import chain
-from django import forms
-from django.http import request
 
-from .models import Person, Educator, Employee, Teacher, Student, Administrator, AcademicUE, UE
-from django.db.models import Q
+from django import forms
+
+
+from .models import  Educator,  Teacher, Student, Administrator, AcademicUE, UE
+
 from django.contrib.auth.hashers import make_password, check_password
-from .utils import validate_efpl_email, validate_efpl_student_email, get_logged_user_from_request
+from .utils import validate_efpl_email, validate_efpl_student_email, get_logged_user_from_request, \
+    validate_efpl_email_or_student_email
 
 
 def clean_email(self):
@@ -16,7 +17,7 @@ def clean_email(self):
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label="Courriel", required=True, validators=[validate_efpl_email])
+    email = forms.EmailField(label="Courriel", required=True, validators=[validate_efpl_email_or_student_email])
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput, required=True)
 
     def clean(self):

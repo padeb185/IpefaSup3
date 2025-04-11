@@ -1,18 +1,27 @@
 from django.core.exceptions import ValidationError
 import re
-
 from IpefaSup3.models import Student, Teacher, Educator
 
 
 def validate_efpl_email(value):
-    if not re.match(r'^[a-zA-Z]+\.[a-zA-Z]+@efpl\.be$', value):
-        raise ValidationError("Email doit être au format prénom.nom@efpl.be")
-
-
+    pattern = r'^[a-zA-Z]+\.[a-zA-Z]+@efpl\.be$'
+    if not re.match(pattern, value):
+        raise ValidationError("L'adresse doit être du type nom.prenom@efpl.be.")
 
 def validate_efpl_student_email(value):
-    if not re.match(r'^[a-zA-Z]+\.[a-zA-Z]+@sqtudent\.efpl\.be$', value):
-        raise ValidationError("Email doit être au format prénom.nom@student.efpl.be")
+    pattern = r'^[a-zA-Z]+\.[a-zA-Z]+@student\.efpl\.be$'
+    if not re.match(pattern, value):
+        raise ValidationError("L'adresse doit être du type nom.prenom@student.efpl.be.")
+
+
+def validate_efpl_email_or_student_email(value):
+    try:
+        validate_efpl_email(value)
+    except ValidationError:
+        try:
+            validate_efpl_student_email(value)
+        except ValidationError:
+            raise ValidationError("L'adresse doit être une adresse EFPL ou EFPL étudiant.")
 
 
 def get_logged_user_from_request(request):

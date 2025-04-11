@@ -7,10 +7,18 @@
 
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <h1>IpefaSup - Educateur</h1>
-    <p>Bienvenue sur Ipefa Sup, {{ logged_user.first_name }} {{ logged_user.last_name }}</p>
-    <p>Nous sommes le {{ current_date_time }}</p>
+    <header class="welcome-header">
+        <div class="user-info">
+            Bienvenue sur IpefaSup,  {{ logged_user.first_name }} {{ logged_user.last_name }}
+        </div>
+        <div class="date-time">
+            Nous sommes le {{ current_date_time }}
+        </div>
+    </header>
 
-   <a href="{% url 'add_student' %}">Ajouter un étudiant</a>
+    <h1>IpefaSup - Educateur</h1>
+
+
+    <a href="{% url 'add_student' %}">Ajouter un étudiant</a>
     <a href="{% url 'student_list' %}">lister les étudiants</a>
 {% endblock %}
