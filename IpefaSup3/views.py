@@ -149,62 +149,72 @@ def add_teacher_views(request):
 
 
 def add_administrator_views(request):
-    if request.method == "POST":
-        form = AddAdministratorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/welcome_administrator')  # Redirection après ajout réussi
-    else:
-        form = AddAdministratorForm()  # Initialisation propre du formulaire
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        if request.method == "POST":
+            form = AddAdministratorForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('/welcome_administrator')  # Redirection après ajout réussi
+        else:
+            form = AddAdministratorForm()  # Initialisation propre du formulaire
 
-    return render(request, 'welcome_administrator/add_administrator.html', {'form': form })
+        return render(request, 'welcome_administrator/add_administrator.html', {'form': form })
 
 def add_academic_ue_views(request):
-    if request.method == 'POST':
-        form = AddAcademicUEForm(request.POST)
-        if form.is_valid():
-            form.save()  # Sauvegarde les données si le formulaire est valide
-            # Rediriger ou renvoyer une réponse après soumission
-    else:
-        form = AddAcademicUEForm()  # Crée une nouvelle instance du formulaire
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        if request.method == 'POST':
+            form = AddAcademicUEForm(request.POST)
+            if form.is_valid():
+                form.save()  # Sauvegarde les données si le formulaire est valide
+                # Rediriger ou renvoyer une réponse après soumission
+        else:
+            form = AddAcademicUEForm()  # Crée une nouvelle instance du formulaire
 
     return render(request, 'welcome_administrator/add_academic_ue.html', {'form': form})
 
 def add_ue_views(request):
-    if request.method == 'POST':
-        form = AddUEForm(request.POST)
-        if form.is_valid():
-            form.save()  # Sauvegarde les données si le formulaire est valide
-            # Rediriger ou renvoyer une réponse après soumission
-    else:
-        form = AddUEForm()  # Crée une nouvelle instance du formulaire
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        if request.method == 'POST':
+            form = AddUEForm(request.POST)
+            if form.is_valid():
+                form.save()  # Sauvegarde les données si le formulaire est valide
+                # Rediriger ou renvoyer une réponse après soumission
+        else:
+            form = AddUEForm()  # Crée une nouvelle instance du formulaire
 
-    return render(request, 'welcome_administrator/add_ue.html', {'form': form})
+        return render(request, 'welcome_administrator/add_ue.html', {'form': form})
 
 
 
 
 def student_list(request):
-    sort_by = request.GET.get('sort_by', None)
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        sort_by = request.GET.get('sort_by', None)
 
-    if sort_by == 'first_name':
-        students = Student.objects.all().order_by('first_name')
-    elif sort_by == 'last_name':
-        students = Student.objects.all().order_by('last_name')
-    else:
-        students = Student.objects.all()
+        if sort_by == 'first_name':
+            students = Student.objects.all().order_by('first_name')
+        elif sort_by == 'last_name':
+            students = Student.objects.all().order_by('last_name')
+        else:
+            students = Student.objects.all()
 
-    return render(request, 'student_list.html', {'students': students})
+        return render(request, 'student_list.html', {'students': students})
 
 def edit_student(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        student = get_object_or_404(Student, id=student_id)
 
-    if request.method == 'POST':
-        form = StudentForm(request.POST, instance=student)
-        if form.is_valid():
-            form.save()  # Sauvegarder les modifications de l'étudiant
-            return redirect('student_list')  # Rediriger vers la liste après la mise à jour
-    else:
-        form = StudentForm(instance=student)
+        if request.method == 'POST':
+            form = StudentForm(request.POST, instance=student)
+            if form.is_valid():
+                form.save()  # Sauvegarder les modifications de l'étudiant
+                return redirect('student_list')  # Rediriger vers la liste après la mise à jour
+        else:
+            form = StudentForm(instance=student)
 
-    return render(request, 'edit_student.html', {'form': form, 'student': student})
+        return render(request, 'edit_student.html', {'form': form, 'student': student})
