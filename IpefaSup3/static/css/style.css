@@ -63,3 +63,22 @@ input[name="csrfmiddlewaretoken"] {
 h1 {
 	padding-top: 200px;
 }
+
+.admin-header {
+    background-color: #cd1531; /* optionnel, pour faire ressortir le blanc */
+    padding: 10px;
+}
+
+.admin-header .user-info,
+.admin-header .date-time {
+    color: white;
+    font-weight: bold;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.3rem;
+
+
+}
+
+a.sort {
+	display: inline;
+}

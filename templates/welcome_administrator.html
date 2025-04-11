@@ -7,9 +7,17 @@
 
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+     <header class="admin-header">
+        <div class="user-info">
+            Connecté en tant que : {{ logged_user.first_name }} {{ logged_user.last_name }}
+        </div>
+        <div class="date-time">
+            Nous sommes le {{ current_date_time }}
+        </div>
+    </header>
+
     <h1>IpefaSup - Administrateur</h1>
-    <p>Bienvenue sur Ipefa Sup, {{ logged_user.first_name }} {{ logged_user.last_name }}</p>
-    <p>Nous sommes le {{ current_date_time }}</p>
+
 
     <a href="{% url 'add_student' %}">Ajouter un étudiant</a>
     <a href="{% url 'add_teacher' %}">Ajouter un professeur</a>
