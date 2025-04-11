@@ -188,7 +188,7 @@ class AddEducatorForm(forms.ModelForm):
             # Vérification que l'utilisateur est soit un Administrator soit un Teacher
             if not logged_user or not isinstance(logged_user, Administrator):
                 # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
+                raise PermissionError("Accès réservé uniquement aux administrateurs")
 
     def clean(self):
         cleaned_data = super(AddEducatorForm, self).clean()
@@ -260,12 +260,57 @@ class StudentForm(forms.ModelForm):
             logged_user = get_logged_user_from_request(self.request)
 
             # Vérification que l'utilisateur est soit un Administrator soit un Teacher
-            if not logged_user or not isinstance(logged_user, (Administrator, Teacher)):
+            if not logged_user or not isinstance(logged_user, (Administrator, Educator)):
                 # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
+                raise PermissionError("Accès réservé uniquement aux administrateurs et éducateur")
 
     class Meta:
         model = Student
+        fields = '__all__'  # Corriger la syntaxe
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        # Vérifie si le mot de passe et la confirmation sont identiques
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError("Les mots de passe ne correspondent pas.")
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        cleaned_data = self.cleaned_data
+        password = cleaned_data.get('password')
+
+        # Si un mot de passe est fourni, le sécuriser
+        if password:
+            cleaned_data['password'] = make_password(password)  # Utiliser make_password pour sécuriser le mot de passe
+
+        # Sauvegarder l'objet Student avec les données nettoyées
+        return super().save(commit)  # Appelle la méthode save() de la classe parente
+
+
+class TeacherForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, required=False, label='Mot de passe')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=False, label='Confirmer le mot de passe')
+
+    def __init__(self, *args, **kwargs):
+        # Récupérer 'request' si fourni
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            from .utils import get_logged_user_from_request
+            logged_user = get_logged_user_from_request(self.request)
+
+            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
+            if not logged_user or not isinstance(logged_user, Administrator):
+                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
+                raise PermissionError("Accès réservé uniquement aux administrateurs ")
+
+    class Meta:
+        model = Educator
         fields = '__all__'  # Corriger la syntaxe
 
     def clean(self):

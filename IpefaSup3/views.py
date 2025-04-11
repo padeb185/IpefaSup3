@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorForm, AddAcademicUEForm, AddUEForm, \
-    StudentForm, AddEducatorForm
+    StudentForm, AddEducatorForm, TeacherForm
 from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
 
 
@@ -231,4 +231,19 @@ def teacher_list(request):
         else:
             teachers = Teacher.objects.all()
 
-        return render(request, 'teacher_list.html', {'teachers': teachers, 'logged_user': logged_user, 'current_date_time': datetime.now})
+        return render(request, 'welcome_administrator/teacher_list.html', {'teachers': teachers, 'logged_user': logged_user, 'current_date_time': datetime.now})
+
+def edit_teacher(request, teacher_id):
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        teacher = get_object_or_404(Teacher, id=teacher_id)
+
+        if request.method == 'POST':
+            form = TeacherForm(request.POST, instance=teacher)
+            if form.is_valid():
+                form.save()  # Sauvegarder les modifications de l'étudiant
+                return redirect('student_list')  # Rediriger vers la liste après la mise à jour
+        else:
+            form = TeacherForm(instance=teacher)
+
+        return render(request, 'welcome_administrator/edit_teacher.html', {'form': form, 'teacher': teacher,'logged_user': logged_user, 'current_date_time': datetime.now})
