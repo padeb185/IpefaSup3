@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="teacher_edit">
-      <change beforePath="$PROJECT_DIR$/templates/welcome_administrator.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/welcome_administrator/edit_teacher.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator/edit_teacher.html" afterDir="false" />
-    </list>
+    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="teacher_edit" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -157,7 +154,7 @@
       <workItem from="1744368362323" duration="1291000" />
       <workItem from="1744369790715" duration="1052000" />
       <workItem from="1744370987938" duration="398000" />
-      <workItem from="1744373701453" duration="1573000" />
+      <workItem from="1744373701453" duration="1750000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -463,7 +460,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744375146921</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="teacher_edit">
+      <option name="closed" value="true" />
+      <created>1744375332627</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1744375332627</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
