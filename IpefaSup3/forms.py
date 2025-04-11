@@ -1,19 +1,7 @@
-
 from django import forms
-
-
 from .models import  Educator,  Teacher, Student, Administrator, AcademicUE, UE
-
 from django.contrib.auth.hashers import make_password, check_password
-from .utils import validate_efpl_email, validate_efpl_student_email, get_logged_user_from_request, \
-    validate_efpl_email_or_student_email
-
-
-def clean_email(self):
-    email = self.cleaned_data['email']
-    if not email.endswith('@student.efpl.be'):
-        raise forms.ValidationError("Email invalide.")
-    return email
+from .utils import validate_efpl_email_or_student_email, get_logged_user_from_request
 
 
 class LoginForm(forms.Form):
@@ -69,6 +57,21 @@ class AddStudentForm(forms.ModelForm):
     class Meta:
         model = Student
         exclude = {}
+
+    def __init__(self, *args, **kwargs):
+        # Récupérer 'request' si fourni
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            from .utils import get_logged_user_from_request
+            logged_user = get_logged_user_from_request(self.request)
+
+            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
+            if not logged_user or not isinstance(logged_user, (Administrator, Teacher)):
+                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
+                raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
+
     def clean(self):
         cleaned_data = super(AddStudentForm, self).clean()
         password = cleaned_data.get("password")
@@ -85,6 +88,7 @@ class AddStudentForm(forms.ModelForm):
             student.save()
         return student
 
+
 class AddTeacherForm(forms.ModelForm):
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
     password_confirm = forms.CharField(label="Confirmer le mot de passe", widget=forms.PasswordInput)
@@ -92,12 +96,27 @@ class AddTeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
         exclude = {}
+
+    def __init__(self, *args, **kwargs):
+        # Récupérer 'request' si fourni
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            from .utils import get_logged_user_from_request
+            logged_user = get_logged_user_from_request(self.request)
+
+            # Vérification que l'utilisateur est un Administrator et non un Student ou un Teacher
+            if not logged_user or not isinstance(logged_user, Administrator):
+                # Si l'utilisateur est un Student ou un Teacher, on l'empêche d'accéder
+                raise PermissionError("Accès réservé uniquement aux administrateurs")
+
     def clean(self):
         cleaned_data = super(AddTeacherForm, self).clean()
         password = cleaned_data.get("password")
         password_confirm = cleaned_data.get("password_confirm")
         if password and password_confirm and password != password_confirm:
-            raise forms.ValidationError("Les mots de passe ne corespondent pas")
+            raise forms.ValidationError("Les mots de passe ne correspondent pas")
         return cleaned_data
 
     def save(self, commit=True):
@@ -116,6 +135,21 @@ class AddAdministratorForm(forms.ModelForm):
     class Meta:
         model = Administrator
         exclude = {}
+
+    def __init__(self, *args, **kwargs):
+        # Récupérer 'request' si fourni
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            from .utils import get_logged_user_from_request
+            logged_user = get_logged_user_from_request(self.request)
+
+            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
+            if not logged_user or not isinstance(logged_user, Administrator):
+                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
+                raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
+
     def clean(self):
         cleaned_data = super(AddAdministratorForm, self).clean()
         password = cleaned_data.get("password")
@@ -141,6 +175,21 @@ class AddEducatorForm(forms.ModelForm):
     class Meta:
         model = Educator
         exclude = {}
+
+    def __init__(self, *args, **kwargs):
+        # Récupérer 'request' si fourni
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            from .utils import get_logged_user_from_request
+            logged_user = get_logged_user_from_request(self.request)
+
+            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
+            if not logged_user or not isinstance(logged_user, Administrator):
+                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
+                raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
+
     def clean(self):
         cleaned_data = super(AddEducatorForm, self).clean()
         password = cleaned_data.get("password")
@@ -160,14 +209,19 @@ class AddEducatorForm(forms.ModelForm):
 
 
 class AddAcademicUEForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)  # on récupère request si fourni
+        self.request = kwargs.pop('request', None)  # On récupère `request` si fourni
         super().__init__(*args, **kwargs)
 
         if self.request:
             from .utils import get_logged_user_from_request
             logged_user = get_logged_user_from_request(self.request)
 
+            # Vérification que l'utilisateur est bien un administrateur
+            if not logged_user or not isinstance(logged_user, Administrator):
+                # Si l'utilisateur n'est pas un administrateur, on peut lever une exception ou rediriger
+                raise PermissionError("Accès réservé uniquement aux administrateurs")
     class Meta:
         model = AcademicUE
         fields = '__all__'
@@ -175,14 +229,19 @@ class AddAcademicUEForm(forms.ModelForm):
 
 
 class AddUEForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)  # on récupère request si fourni
+        self.request = kwargs.pop('request', None)  # On récupère `request` si fourni
         super().__init__(*args, **kwargs)
 
         if self.request:
             from .utils import get_logged_user_from_request
             logged_user = get_logged_user_from_request(self.request)
 
+            # Vérification que l'utilisateur est bien un administrateur
+            if not logged_user or not isinstance(logged_user, Administrator):
+                # Si l'utilisateur n'est pas un administrateur, on peut lever une exception ou rediriger
+                raise PermissionError("Accès réservé uniquement aux administrateurs")
     class Meta:
         model = UE
         fields = '__all__'
@@ -201,7 +260,11 @@ class StudentForm(forms.ModelForm):
         if self.request:
             from .utils import get_logged_user_from_request
             logged_user = get_logged_user_from_request(self.request)
-            # Tu peux utiliser logged_user ici si nécessaire pour personnaliser le formulaire
+
+            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
+            if not logged_user or not isinstance(logged_user, (Administrator, Teacher)):
+                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
+                raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
 
     class Meta:
         model = Student

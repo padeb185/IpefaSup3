@@ -118,7 +118,7 @@ def add_student_views(request):
         else:
             form = AddStudentForm()  # Initialisation propre du formulaire
 
-        return render(request, 'welcome/add_student.html', {'form': form})
+        return render(request, 'welcome/add_student.html', {'form': form,  'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def add_educator_views(request):
     logged_user = get_logged_user_from_request(request)
@@ -131,19 +131,21 @@ def add_educator_views(request):
         else:
             form = AddEducatorForm()  # Initialisation propre du formulaire
 
-        return render(request, 'welcome_administrator/add_educator.html', {'form': form})
+        return render(request, 'welcome_administrator/add_educator.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 
 def add_teacher_views(request):
-    if request.method == "POST":
-        form = AddTeacherForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/welcome_administrator')  # Redirection après ajout réussi
-    else:
-        form = AddTeacherForm()  # Initialisation propre du formulaire
+    logged_user = get_logged_user_from_request(request)
+    if logged_user:
+        if request.method == "POST":
+            form = AddTeacherForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('/welcome_administrator')  # Redirection après ajout réussi
+        else:
+            form = AddTeacherForm()  # Initialisation propre du formulaire
 
-    return render(request, 'welcome_administrator/add_teacher.html', {'form': form})
+        return render(request, 'welcome_administrator/add_teacher.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 
 def add_administrator_views(request):
@@ -155,7 +157,7 @@ def add_administrator_views(request):
     else:
         form = AddAdministratorForm()  # Initialisation propre du formulaire
 
-    return render(request, 'welcome_administrator/add_administrator.html', {'form': form})
+    return render(request, 'welcome_administrator/add_administrator.html', {'form': form })
 
 def add_academic_ue_views(request):
     if request.method == 'POST':

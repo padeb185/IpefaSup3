@@ -1,6 +1,9 @@
 from django.core.exceptions import ValidationError
 import re
-from IpefaSup3.models import Student, Teacher, Educator
+
+from django.shortcuts import redirect
+
+from IpefaSup3.models import Student, Teacher, Educator, Administrator
 
 
 def validate_efpl_email(value):
@@ -28,6 +31,7 @@ def get_logged_user_from_request(request):
     user_id = request.session.get('logged_user_id')
     if not user_id:
         return None
+
     # Recherche l'utilisateur avec l'ID
     user = None
     if Student.objects.filter(id=user_id).exists():
@@ -36,5 +40,9 @@ def get_logged_user_from_request(request):
         user = Teacher.objects.get(id=user_id)
     elif Educator.objects.filter(id=user_id).exists():
         user = Educator.objects.get(id=user_id)
+    elif Administrator.objects.filter(id=user_id).exists():
+        user = Administrator.objects.get(id=user_id)
 
     return user
+
+

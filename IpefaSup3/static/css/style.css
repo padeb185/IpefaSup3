@@ -73,7 +73,9 @@ h1 {
 
 .welcome-header .user-info,
 .welcome-header .date-time {
-    color: white;
+    display: flex;
+    align-items: center;
+	color: white;
     font-weight: bold;
 	font-family: 'Montserrat', sans-serif;
 	font-size: 1.3rem;
