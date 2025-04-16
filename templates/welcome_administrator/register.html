@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ajout d'un étudiant{% endblock %}
+
+{% block bodyId %}addStudentPage{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <header class="welcome-header">
+        <div class="user-info">
+            Bienvenue sur IpefaSup,  {{ logged_user.first_name }} {{ logged_user.last_name }}
+        </div>
+        <div class="date-time">
+            Nous sommes le {{ current_date_time }}
+        </div>
+    </header>
+    <h1>Création d'un compte</h1>
+    <form>
+        <p>
+            <label for="profileType">Vous êtes:</label>
+                <select>
+                    <option value="étudiant" {% if addStudentForm.is_bound %}
+                                selected="selected" {% endif %}>Etudiant</option>
+                    <option value="professeur" {% if addTeacherForm.is_bound %}
+                                selected="selected" {% endif %}>professeur</option>
+                    <option value="éducateur" {% if addEducatorForm.is_bound %}
+                                selected="selected" {% endif %}>éducateur</option>
+                    <option value="administrateur" {% if addAdministratorForm.is_bound %}
+                                selected="selected" {% endif %}>administateur</option>
+                </select>
+        </p>
+    </form>
+
+    <form action="{% url 'register' %}" method="post" id="addStudentForm" style="display: none;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <input type="hidden" name="addProfileForm" value="étudiant">
+            <input type="submit" value="créer un compte">
+        </p>
+    </form>
+
+    <form action="{% url 'register' %}" method="post" id="addEducatorForm" style="display: none;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <input type="hidden" name="addProfileForm" value="professeur">
+            <input type="submit" value="créer un compte">
+        </p>
+    </form>
+
+    <form action="{% url 'register' %}" method="post" id="addEducatorForm" style="display: none;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <input type="hidden" name="addProfileForm" value="éducateur">
+            <input type="submit" value="créer un compte">
+        </p>
+    </form>
+
+    <form action="{% url 'register' %}" method="post" id="addStudentForm" style="display: none;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <input type="hidden" name="addAdministratorForm" value="administrateur">
+            <input type="submit" value="créer un compte">
+        </p>
+    </form>
+
+{% endblock %}
