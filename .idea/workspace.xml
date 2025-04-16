@@ -7,8 +7,7 @@
     <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="model.py">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IpefaSup3/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/welcome_administrator.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/welcome_administrator/add_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/welcome_administrator/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome_administrator/add_profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +174,8 @@
       <workItem from="1744736462534" duration="284000" />
       <workItem from="1744791103792" duration="203000" />
       <workItem from="1744791345366" duration="197000" />
-      <workItem from="1744791690940" duration="6762000" />
+      <workItem from="1744791690940" duration="6993000" />
+      <workItem from="1744799011482" duration="326000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -545,7 +545,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744797206316</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="model.py">
+      <option name="closed" value="true" />
+      <created>1744798595215</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1744798595215</updated>
+    </task>
+    <task id="LOCAL-00048" summary="model.py">
+      <option name="closed" value="true" />
+      <created>1744798683955</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1744798683955</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

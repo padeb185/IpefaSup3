@@ -29,7 +29,7 @@ urlpatterns = [
 
     path('welcome_administrator/', welcome_administrator, name='welcome_administrator'),  # Page pour l'administrateur
     path('welcome_student/', welcome_student, name='welcome_student'),  # Page
-    path('welcome_administrator/register/', register, name='register'),
+    path('welcome_administrator/add_profile/', add_profile_views, name='add_profile'),
     path('welcome_administrator/add_academic_ue/', add_academic_ue_views, name='add_academic_ue'),
     path('welcome_administrator/add_ue/', add_ue_views, name='add_ue'),
     path('students/', student_list, name='student_list'),

@@ -32,7 +32,7 @@
         </p>
     </form>
 
-    <form action="{% url 'register' %}" method="post" id="addStudentForm" style="display: none;">
+    <form action="{% url 'welcome_administrator/add_profile' %}" method="post" id="addStudentForm" style="display: none;">
         {% csrf_token %}
         {{ form.as_p }}
         <p>
@@ -41,7 +41,7 @@
         </p>
     </form>
 
-    <form action="{% url 'register' %}" method="post" id="addEducatorForm" style="display: none;">
+    <form action="{% url 'welcome_administrator/add_profile' %}" method="post" id="addEducatorForm" style="display: none;">
         {% csrf_token %}
         {{ form.as_p }}
         <p>
@@ -50,7 +50,7 @@
         </p>
     </form>
 
-    <form action="{% url 'register' %}" method="post" id="addEducatorForm" style="display: none;">
+    <form action="{% url 'welcome_administrator/add_profile' %}" method="post" id="addEducatorForm" style="display: none;">
         {% csrf_token %}
         {{ form.as_p }}
         <p>
@@ -59,7 +59,7 @@
         </p>
     </form>
 
-    <form action="{% url 'register' %}" method="post" id="addStudentForm" style="display: none;">
+    <form action="{% url 'welcome_administrator/add_profile' %}" method="post" id="addStudentForm" style="display: none;">
         {% csrf_token %}
         {{ form.as_p }}
         <p>
