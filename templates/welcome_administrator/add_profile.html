@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Ajout d'un étudiant{% endblock %}
+{% block title %}Ajout d'un Profil{% endblock %}
 
-{% block bodyId %}addStudentPage{% endblock %}
+{% block bodyId %}addProfilePage{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -19,22 +19,22 @@
     <form>
         <p>
             <label for="profileType">Vous êtes:</label>
-                <select>
-                    <option value="étudiant" {% if addStudentForm.is_bound %}
+            <select>
+                <option value="étudiant" {% if addStudentForm.is_bound %}
                                 selected="selected" {% endif %}>Etudiant</option>
-                    <option value="professeur" {% if addTeacherForm.is_bound %}
+                <option value="professeur" {% if addTeacherForm.is_bound %}
                                 selected="selected" {% endif %}>professeur</option>
-                    <option value="éducateur" {% if addEducatorForm.is_bound %}
+                <option value="éducateur" {% if addEducatorForm.is_bound %}
                                 selected="selected" {% endif %}>éducateur</option>
-                    <option value="administrateur" {% if addAdministratorForm.is_bound %}
+                <option value="administrateur" {% if addAdministratorForm.is_bound %}
                                 selected="selected" {% endif %}>administateur</option>
-                </select>
+            </select>
         </p>
     </form>
 
     <form action="{% url 'welcome_administrator/add_profile' %}" method="post" id="addStudentForm" style="display: none;">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ addStudentForm.as_p }}
         <p>
             <input type="hidden" name="addProfileForm" value="étudiant">
             <input type="submit" value="créer un compte">
@@ -43,7 +43,7 @@
 
     <form action="{% url 'welcome_administrator/add_profile' %}" method="post" id="addEducatorForm" style="display: none;">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ addTeacherForm.as_p }}
         <p>
             <input type="hidden" name="addProfileForm" value="professeur">
             <input type="submit" value="créer un compte">
@@ -52,7 +52,7 @@
 
     <form action="{% url 'welcome_administrator/add_profile' %}" method="post" id="addEducatorForm" style="display: none;">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ addEducatorForm.as_p }}
         <p>
             <input type="hidden" name="addProfileForm" value="éducateur">
             <input type="submit" value="créer un compte">
@@ -61,11 +61,33 @@
 
     <form action="{% url 'welcome_administrator/add_profile' %}" method="post" id="addStudentForm" style="display: none;">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ addAdministratorForm.as_p }}
         <p>
             <input type="hidden" name="addAdministratorForm" value="administrateur">
             <input type="submit" value="créer un compte">
         </p>
     </form>
+
+    <script type="text/javascript">
+    function displayRightForm() {
+        const profileType = $('#profileType').val();
+
+        $('#addStudentForm').hide();
+        $('#addEducatorForm').hide();
+        $('#addTeacherForm').hide();
+        $('#addAdministratorForm').hide();
+
+        if (profileType === 'étudiant') {
+            $('#addStudentForm').show();
+        } else if (profileType === 'professeur') {
+            $('#addTeacherForm').show();
+        } else if (profileType === 'éducateur') {
+            $('#addEducatorForm').show();
+        } else {
+            $('#addAdministratorForm').show();
+        }
+    }
+</script>
+
 
 {% endblock %}
