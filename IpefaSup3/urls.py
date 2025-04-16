@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from IpefaSup3.views import (login, welcome, add_profile_views, welcome_teacher, welcome_administrator, welcome_student,
-                             add_academic_ue_views, add_ue_views, student_list, edit_student,  teacher_list, edit_teacher)
+                             add_academic_ue_views, add_ue_views, student_list, edit_student, teacher_list,
+                             edit_teacher, register)
 
 urlpatterns = [
     path('', login, name='login'),
@@ -28,7 +29,7 @@ urlpatterns = [
 
     path('welcome_administrator/', welcome_administrator, name='welcome_administrator'),  # Page pour l'administrateur
     path('welcome_student/', welcome_student, name='welcome_student'),  # Page
-    path('welcome_administrator/register/', add_profile_views, name='register'),
+    path('welcome_administrator/register/', register, name='register'),
     path('welcome_administrator/add_academic_ue/', add_academic_ue_views, name='add_academic_ue'),
     path('welcome_administrator/add_ue/', add_ue_views, name='add_ue'),
     path('students/', student_list, name='student_list'),
