@@ -68,7 +68,7 @@
         </p>
     </form>
 
-    <script type="text/javascript">
+  <script type="text/javascript">
     function displayRightForm() {
         const profileType = $('#profileType').val();
 
@@ -87,6 +87,11 @@
             $('#addAdministratorForm').show();
         }
     }
+
+    $(document).ready(function() {
+        displayRightForm();
+        $('#profileType').on('change', displayRightForm);
+    });
 </script>
 
 
