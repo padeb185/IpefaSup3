@@ -48,11 +48,29 @@ class LoginForm(forms.Form):
 
         return cleaned_data
 
+class BaseListForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, required=False, label='Mot de passe')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=False, label='Confirmer le mot de passe')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError("Les mots de passe ne corespondent pas")
+        return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.cleaned_data["password"]:
+            instance.password = make_password(self.cleaned_data["password"])
+        if commit:
+            instance.save()
+        return instance
 
 
-class AddStudentForm(forms.ModelForm):
-    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
-    password_confirm = forms.CharField(label="Confirmer le mot de passe", widget=forms.PasswordInput)
+
+class AddStudentForm(BaseListForm):
 
     class Meta:
         model = Student
@@ -72,26 +90,9 @@ class AddStudentForm(forms.ModelForm):
                 # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
                 raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
 
-    def clean(self):
-        cleaned_data = super(AddStudentForm, self).clean()
-        password = cleaned_data.get("password")
-        password_confirm = cleaned_data.get("password_confirm")
-        if password and password_confirm and password != password_confirm:
-            raise forms.ValidationError("Les mots de passe ne corespondent pas")
-        return cleaned_data
-
-    def save(self, commit=True):
-        student = super().save(commit=False)
-        if self.cleaned_data["password"]:
-            student.password = make_password(self.cleaned_data["password"])
-        if commit:
-            student.save()
-        return student
 
 
-class AddTeacherForm(forms.ModelForm):
-    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
-    password_confirm = forms.CharField(label="Confirmer le mot de passe", widget=forms.PasswordInput)
+class AddTeacherForm(BaseListForm):
 
     class Meta:
         model = Teacher
@@ -111,26 +112,9 @@ class AddTeacherForm(forms.ModelForm):
                 # Si l'utilisateur est un Student ou un Teacher, on l'empêche d'accéder
                 raise PermissionError("Accès réservé uniquement aux administrateurs")
 
-    def clean(self):
-        cleaned_data = super(AddTeacherForm, self).clean()
-        password = cleaned_data.get("password")
-        password_confirm = cleaned_data.get("password_confirm")
-        if password and password_confirm and password != password_confirm:
-            raise forms.ValidationError("Les mots de passe ne correspondent pas")
-        return cleaned_data
-
-    def save(self, commit=True):
-        teacher = super().save(commit=False)
-        if self.cleaned_data["password"]:
-            teacher.password = make_password(self.cleaned_data["password"])
-        if commit:
-            teacher.save()
-        return teacher
 
 
-class AddAdministratorForm(forms.ModelForm):
-    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
-    password_confirm = forms.CharField(label="Confirmer le mot de passe", widget=forms.PasswordInput)
+class AddAdministratorForm(BaseListForm):
 
     class Meta:
         model = Administrator
@@ -150,27 +134,9 @@ class AddAdministratorForm(forms.ModelForm):
                 # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
                 raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
 
-    def clean(self):
-        cleaned_data = super(AddAdministratorForm, self).clean()
-        password = cleaned_data.get("password")
-        password_confirm = cleaned_data.get("password_confirm")
-        if password and password_confirm and password != password_confirm:
-            raise forms.ValidationError("Les mots de passe ne corespondent pas")
-        return cleaned_data
-
-    def save(self, commit=True):
-        administrator = super().save(commit=False)
-        if self.cleaned_data["password"]:
-            administrator.password = make_password(self.cleaned_data["password"])
-        if commit:
-            administrator.save()
-        return administrator
 
 
-
-class AddEducatorForm(forms.ModelForm):
-    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
-    password_confirm = forms.CharField(label="Confirmer le mot de passe", widget=forms.PasswordInput)
+class AddEducatorForm(BaseListForm):
 
     class Meta:
         model = Educator
@@ -189,23 +155,6 @@ class AddEducatorForm(forms.ModelForm):
             if not logged_user or not isinstance(logged_user, Administrator):
                 # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
                 raise PermissionError("Accès réservé uniquement aux administrateurs")
-
-    def clean(self):
-        cleaned_data = super(AddEducatorForm, self).clean()
-        password = cleaned_data.get("password")
-        password_confirm = cleaned_data.get("password_confirm")
-        if password and password_confirm and password != password_confirm:
-            raise forms.ValidationError("Les mots de passe ne corespondent pas")
-        return cleaned_data
-
-    def save(self, commit=True):
-        educator = super().save(commit=False)
-        if self.cleaned_data["password"]:
-            educator.password = make_password(self.cleaned_data["password"])
-        if commit:
-            educator.save()
-        return educator
-
 
 
 class AddAcademicUEForm(forms.ModelForm):
@@ -246,9 +195,9 @@ class AddUEForm(forms.ModelForm):
         exclude = {}
 
 
-class StudentForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, required=False, label='Mot de passe')
-    confirm_password = forms.CharField(widget=forms.PasswordInput, required=False, label='Confirmer le mot de passe')
+
+
+class StudentProfileForm(BaseListForm):#liste des étudiants
 
     def __init__(self, *args, **kwargs):
         # Récupérer 'request' si fourni
@@ -268,32 +217,9 @@ class StudentForm(forms.ModelForm):
         model = Student
         fields = '__all__'  # Corriger la syntaxe
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-
-        # Vérifie si le mot de passe et la confirmation sont identiques
-        if password and confirm_password and password != confirm_password:
-            raise forms.ValidationError("Les mots de passe ne correspondent pas.")
-
-        return cleaned_data
-
-    def save(self, commit=True):
-        cleaned_data = self.cleaned_data
-        password = cleaned_data.get('password')
-
-        # Si un mot de passe est fourni, le sécuriser
-        if password:
-            cleaned_data['password'] = make_password(password)  # Utiliser make_password pour sécuriser le mot de passe
-
-        # Sauvegarder l'objet Student avec les données nettoyées
-        return super().save(commit)  # Appelle la méthode save() de la classe parente
 
 
-class TeacherForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, required=False, label='Mot de passe')
-    confirm_password = forms.CharField(widget=forms.PasswordInput, required=False, label='Confirmer le mot de passe')
+class TeacherProfileForm(BaseListForm):
 
     def __init__(self, *args, **kwargs):
         # Récupérer 'request' si fourni
@@ -312,25 +238,3 @@ class TeacherForm(forms.ModelForm):
     class Meta:
         model = Educator
         fields = '__all__'  # Corriger la syntaxe
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-
-        # Vérifie si le mot de passe et la confirmation sont identiques
-        if password and confirm_password and password != confirm_password:
-            raise forms.ValidationError("Les mots de passe ne correspondent pas.")
-
-        return cleaned_data
-
-    def save(self, commit=True):
-        cleaned_data = self.cleaned_data
-        password = cleaned_data.get('password')
-
-        # Si un mot de passe est fourni, le sécuriser
-        if password:
-            cleaned_data['password'] = make_password(password)  # Utiliser make_password pour sécuriser le mot de passe
-
-        # Sauvegarder l'objet Student avec les données nettoyées
-        return super().save(commit)  # Appelle la méthode save() de la classe parente

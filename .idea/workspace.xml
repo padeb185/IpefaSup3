@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="teacher_edit">
+    <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="model.py">
+      <change afterPath="$PROJECT_DIR$/templates/user_profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,6 +174,7 @@
       <workItem from="1744736462534" duration="284000" />
       <workItem from="1744791103792" duration="203000" />
       <workItem from="1744791345366" duration="197000" />
+      <workItem from="1744791690940" duration="4464000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -525,7 +528,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744718135404</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="model.py">
+      <option name="closed" value="true" />
+      <created>1744791727950</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1744791727950</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -544,6 +555,7 @@
     <MESSAGE value="admin clean" />
     <MESSAGE value="teacher_list" />
     <MESSAGE value="teacher_edit" />
-    <option name="LAST_COMMIT_MESSAGE" value="teacher_edit" />
+    <MESSAGE value="model.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="model.py" />
   </component>
 </project>

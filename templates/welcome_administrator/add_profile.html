@@ -15,8 +15,20 @@
             Nous sommes le {{ current_date_time }}
         </div>
     </header>
-    <h1>Ajout d'un étudiant</h1>
-    <form action="{% url 'add_student' %}" method="post">
+    <h1>Création d'un compte</h1>
+    <form>
+        <p>
+            <label for="profileType">Vous êtes:</label>
+            <select>
+                <option value="Etudiant" {% if addStudentForm.is_bound %}
+                            selected="selected" {% endif %}>Etudiant</option>
+                <option value=""></option>
+            </select>
+        </p>
+    </form>
+
+
+
 
         {% csrf_token %}
         {{ form.as_p }}

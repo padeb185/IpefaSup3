@@ -1,18 +1,10 @@
 from datetime import datetime
-from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorForm, AddAcademicUEForm, AddUEForm, \
-    StudentForm, AddEducatorForm, TeacherForm
+    StudentProfileForm, AddEducatorForm, TeacherProfileForm
 from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
-
-
-
-
-
-# views.py
 from django.shortcuts import render
-
 from .utils import get_logged_user_from_request
 
 
@@ -49,8 +41,6 @@ def welcome_administrator(request):
         return render(request, 'welcome_administrator.html', {'logged_user': logged_user, 'current_date_time': datetime.now()} )
     else:
         return render(request, 'login.html')  # pas de slash initial ici
-
-
 
 
 
@@ -105,74 +95,85 @@ def login(request):
         return render(request, "login.html", {'form': form})
 
 
+def register(request):
+    if len(request.POST) > 0 and 'profileType' in request.POST:
+        studentForm = StudentProfileForm(prefix='st')
+        teacherForm = TeacherProfileForm(prefix='te')
+        if request.POST['profileType'] == 'Etudiant':
+            studentForm = StudentProfileForm(request.POST, prefix='st')
+            if studentForm.is_valid():
+                studentForm.save()
+                return redirect('/login')
+        elif request.POST['profileType'] == 'Professeur':
+            teacherForm = TeacherProfileForm(request.POST, prefix='te')
+            if teacherForm.is_valid():
+                teacherForm.save()
+                return redirect('/login')
+        return render(request, 'user_profile.html',
+                      {'studentForm': studentForm, 'teacherForm': teacherForm})
+
+    else:
+        studentForm = StudentProfileForm(request.POST, prefix='st')
+        teacherForm = TeacherProfileForm(request.POST, prefix='te')
+        return render(request, 'user_profile.html',
+                      {'studentForm': studentForm, 'teacherForm': teacherForm})
 
 
-def add_student_views(request):
-    logged_user = get_logged_user_from_request(request)
-    if logged_user:
-        if request.method == "POST":
-            form = AddStudentForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('/welcome')  # Redirection après ajout réussi
-        else:
-            form = AddStudentForm()  # Initialisation propre du formulaire
+def add_profile_views(request):
+    if len(request.POST) > 0 and 'profileType' in request.POST:
+        addStudentForm = AddStudentForm(prefix= 'st')
+        addTeacherForm = AddTeacherForm(prefix= 'te')
+        addEducatorForm = AddEducatorForm(prefix= 'ed')
+        addAdministratorForm = AddAdministratorForm(prefix= 'ad')
+        if request.POST['profileType'] == 'Etudiant':
+            addStudentForm = AddStudentForm(request.POST, prefix= 'st')
+            if addStudentForm.is_valid():
+                addStudentForm.save()
+                return redirect('/login')
+        elif request.POST['profileType'] == 'Professeur':
+            addTeacherForm = AddTeacherForm(request.POST, prefix= 'te')
+            if addTeacherForm.is_valid():
+                addTeacherForm.save()
+                return redirect('/login')
+        elif request.POST['profileType'] == 'Educateur':
+            addEducatorForm = AddEducatorForm(request.POST, prefix= 'ed')
+            if addEducatorForm.is_valid():
+                addEducatorForm.save()
+                return redirect('/login')
+        elif request.POST['profileType'] == 'Administrator':
+            addAdministratorForm = AddAdministratorForm(request.POST, prefix= 'ad')
+            if addAdministratorForm.is_valid():
+                addAdministratorForm.save()
+                return redirect('/login')
 
-        return render(request, 'welcome/add_student.html', {'form': form,  'logged_user': logged_user, 'current_date_time': datetime.now})
-
-def add_educator_views(request):
-    logged_user = get_logged_user_from_request(request)
-    if logged_user:
-        if request.method == "POST":
-            form = AddEducatorForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('/welcome')  # Redirection après ajout réussi
-        else:
-            form = AddEducatorForm()  # Initialisation propre du formulaire
-
-        return render(request, 'welcome_administrator/add_educator.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
-
-
-def add_teacher_views(request):
-    logged_user = get_logged_user_from_request(request)
-    if logged_user:
-        if request.method == "POST":
-            form = AddTeacherForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('/welcome_administrator')  # Redirection après ajout réussi
-        else:
-            form = AddTeacherForm()  # Initialisation propre du formulaire
-
-        return render(request, 'welcome_administrator/add_teacher.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
+        return render(request, 'user_profile.html',
+                      {'addStudentForm': addStudentForm, 'addTeacherForm': addTeacherForm
+                                                   , 'addEducatorForm': addEducatorForm, 'addAdministratorForm': addAdministratorForm})
+    else:
+        addStudentForm = AddStudentForm(prefix= 'st')
+        addTeacherForm = AddTeacherForm(prefix= 'te')
+        addEducatorForm = AddEducatorForm(prefix= 'ed')
+        addAdministratorForm = AddAdministratorForm(prefix= 'ad')
+        return render(request, 'user_profile.html',
+                      {'addStudentForm': addStudentForm, 'addTeacherForm': addTeacherForm, 'addEducatorForm': addEducatorForm, 'addAdministratorForm': addAdministratorForm})
 
 
-def add_administrator_views(request):
-    logged_user = get_logged_user_from_request(request)
-    if logged_user:
-        if request.method == "POST":
-            form = AddAdministratorForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('/welcome_administrator')  # Redirection après ajout réussi
-        else:
-            form = AddAdministratorForm()  # Initialisation propre du formulaire
-
-        return render(request, 'welcome_administrator/add_administrator.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def add_academic_ue_views(request):
     logged_user = get_logged_user_from_request(request)
     if logged_user:
         if request.method == 'POST':
-            form = AddAcademicUEForm(request.POST)
-            if form.is_valid():
-                form.save()  # Sauvegarde les données si le formulaire est valide
+            academicForm = AddAcademicUEForm(request.POST)
+            if academicForm.is_valid():
+                academicForm.save()  # Sauvegarde les données si le formulaire est valide
                 # Rediriger ou renvoyer une réponse après soumission
         else:
             form = AddAcademicUEForm()  # Crée une nouvelle instance du formulaire
 
-    return render(request, 'welcome_administrator/add_academic_ue.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
+    return render(request, 'welcome_administrator/add_academic_ue.html',
+                  {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
+
+
 
 def add_ue_views(request):
     logged_user = get_logged_user_from_request(request)
@@ -185,7 +186,8 @@ def add_ue_views(request):
         else:
             form = AddUEForm()  # Crée une nouvelle instance du formulaire
 
-        return render(request, 'welcome_administrator/add_ue.html', {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
+        return render(request, 'welcome_administrator/add_ue.html',
+                      {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 
 
@@ -202,7 +204,8 @@ def student_list(request):
         else:
             students = Student.objects.all()
 
-        return render(request, 'student_list.html', {'students': students, 'logged_user': logged_user, 'current_date_time': datetime.now})
+        return render(request, 'student_list.html',
+                      {'students': students, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def edit_student(request, student_id):
     logged_user = get_logged_user_from_request(request)
@@ -210,12 +213,12 @@ def edit_student(request, student_id):
         student = get_object_or_404(Student, id=student_id)
 
         if request.method == 'POST':
-            form = StudentForm(request.POST, instance=student)
+            form = StudentProfileForm(request.POST, instance=student)
             if form.is_valid():
                 form.save()  # Sauvegarder les modifications de l'étudiant
                 return redirect('student_list')  # Rediriger vers la liste après la mise à jour
         else:
-            form = StudentForm(instance=student)
+            form = StudentProfileForm(instance=student)
 
         return render(request, 'edit_student.html', {'form': form, 'student': student,'logged_user': logged_user, 'current_date_time': datetime.now})
 
@@ -239,11 +242,11 @@ def edit_teacher(request, teacher_id):
         teacher = get_object_or_404(Teacher, id=teacher_id)
 
         if request.method == 'POST':
-            form = TeacherForm(request.POST, instance=teacher)
+            form = TeacherProfileForm(request.POST, instance=teacher)
             if form.is_valid():
                 form.save()  # Sauvegarder les modifications de l'étudiant
-                return redirect('student_list')  # Rediriger vers la liste après la mise à jour
+                return redirect('teacher_list')  # Rediriger vers la liste après la mise à jour
         else:
-            form = TeacherForm(instance=teacher)
+            form = TeacherProfileForm(instance=teacher)
 
         return render(request, 'welcome_administrator/edit_teacher.html', {'form': form, 'teacher': teacher,'logged_user': logged_user, 'current_date_time': datetime.now})
