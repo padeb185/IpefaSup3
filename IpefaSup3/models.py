@@ -4,11 +4,6 @@ import re
 
 
 
-
-
-
-
-
 def custom_email_validator(value):
     pattern = r'^[a-zA-Z]+\.[a-zA-Z]+@(student\.)?efpl\.be$'
     if not re.match(pattern, value):
