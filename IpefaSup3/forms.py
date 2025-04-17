@@ -68,6 +68,14 @@ class BaseListForm(forms.ModelForm):
             instance.save()
         return instance
 
+    def check_if_admin(self):
+        logged_user = get_logged_user_from_request(self.request)
+        if not logged_user or not isinstance(logged_user, Administrator):
+            raise PermissionError("Accès réservé aux administrateurs")
+
+    @property
+    def model_name(self):
+        return self._meta.model.__name__
 
 
 class AddStudentForm(BaseListForm):
@@ -86,9 +94,9 @@ class AddStudentForm(BaseListForm):
             logged_user = get_logged_user_from_request(self.request)
 
             # Vérification que l'utilisateur est soit un Administrator soit un Teacher
-            if not logged_user or not isinstance(logged_user, (Administrator, Teacher)):
+            if not logged_user or not isinstance(logged_user, (Administrator, Educator)):
                 # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
+                raise PermissionError("Accès réservé uniquement aux administrateurs et Educateurs")
 
 
 
@@ -99,40 +107,26 @@ class AddTeacherForm(BaseListForm):
         exclude = {}
 
     def __init__(self, *args, **kwargs):
-        # Récupérer 'request' si fourni
         self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
-
         if self.request:
-            from .utils import get_logged_user_from_request
-            logged_user = get_logged_user_from_request(self.request)
-
-            # Vérification que l'utilisateur est un Administrator et non un Student ou un Teacher
-            if not logged_user or not isinstance(logged_user, Administrator):
-                # Si l'utilisateur est un Student ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs")
+            self.check_if_admin()
 
 
 
 class AddAdministratorForm(BaseListForm):
-
     class Meta:
         model = Administrator
         exclude = {}
 
     def __init__(self, *args, **kwargs):
-        # Récupérer 'request' si fourni
         self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
-
         if self.request:
-            from .utils import get_logged_user_from_request
-            logged_user = get_logged_user_from_request(self.request)
+            self.check_if_admin()
 
-            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
-            if not logged_user or not isinstance(logged_user, Administrator):
-                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs et enseignants")
+
+
 
 
 
@@ -143,18 +137,10 @@ class AddEducatorForm(BaseListForm):
         exclude = {}
 
     def __init__(self, *args, **kwargs):
-        # Récupérer 'request' si fourni
         self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
-
         if self.request:
-            from .utils import get_logged_user_from_request
-            logged_user = get_logged_user_from_request(self.request)
-
-            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
-            if not logged_user or not isinstance(logged_user, Administrator):
-                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs")
+            self.check_if_admin()
 
 
 class AddAcademicUEForm(forms.ModelForm):

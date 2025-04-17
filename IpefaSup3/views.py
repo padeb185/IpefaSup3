@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorForm, AddAcademicUEForm, AddUEForm, \
     StudentProfileForm, AddEducatorForm, TeacherProfileForm
@@ -95,90 +95,55 @@ def login(request):
         return render(request, "login.html", {'form': form})
 
 
-def register(request):
-    if len(request.POST) > 0 and 'profileType' in request.POST:
-        studentForm = StudentProfileForm(prefix='st')
-        teacherForm = TeacherProfileForm(prefix='te')
-        if request.POST['profileType'] == 'Etudiant':
-            studentForm = StudentProfileForm(request.POST, prefix='st')
-            if studentForm.is_valid():
-                studentForm.save()
-                return redirect('/login')
-        elif request.POST['profileType'] == 'Professeur':
-            teacherForm = TeacherProfileForm(request.POST, prefix='te')
-            if teacherForm.is_valid():
-                teacherForm.save()
-                return redirect('/login')
-        return render(request, 'user_profile.html',
-                      {'studentForm': studentForm, 'teacherForm': teacherForm})
 
-    else:
-        studentForm = StudentProfileForm(request.POST, prefix='st')
-        teacherForm = TeacherProfileForm(request.POST, prefix='te')
-        return render(request, 'user_profile.html',
-                      {'studentForm': studentForm, 'teacherForm': teacherForm})
-
-
-
-
-def add_profile_views(request):
-    # Initialisation des formulaires vides
-    forms = {
-        'Etudiant': AddStudentForm(prefix='st'),
-        'Professeur': AddTeacherForm(prefix='te'),
-        'Educateur': AddEducatorForm(prefix='ed'),
-        'Administrator': AddAdministratorForm(prefix='ad'),
-    }
+def add_profile(request):
+    form = None
+    model_name = None
+    form_type = request.POST.get('form_type', None)  # Récupérer le type de formulaire
 
     if request.method == 'POST':
-        profile_type = request.POST.get('profileType')
+        if form_type == 'student':
+            form = AddStudentForm(request.POST, request=request)
+        elif form_type == 'teacher':
+            form = AddTeacherForm(request.POST, request=request)
+        elif form_type == 'administrator':
+            form = AddAdministratorForm(request.POST, request=request)
+        elif form_type == 'educator':
+            form = AddEducatorForm(request.POST, request=request)
+        else:
+            return HttpResponseForbidden("Type de formulaire non valide")
 
-        form_classes = {
-            'Etudiant': AddStudentForm,
-            'Professeur': AddTeacherForm,
-            'Educateur': AddEducatorForm,
-            'Administrator': AddAdministratorForm,
-        }
+        if form.is_valid():
+            form.save()
+            return redirect('success_url')  # À remplacer par ta vraie URL de succès
 
-        if profile_type in form_classes:
-            # Création du formulaire avec données POST
-            prefix_map = {
-                'Etudiant': 'st',
-                'Professeur': 'te',
-                'Educateur': 'ed',
-                'Administrator': 'ad',
-            }
+        # Obtenir le nom du modèle à afficher dans le template
+        model_name = form.instance.__class__.__name__
 
-            form = form_classes[profile_type](request.POST, prefix=prefix_map[profile_type])
-            forms[profile_type] = form  # Remplacement pour affichage si erreur
-
-            if form.is_valid():
-                form.save()
-                return redirect('/login')
-
-    return render(request, 'user_profile.html', {
-        'addStudentForm': forms['Etudiant'],
-        'addTeacherForm': forms['Professeur'],
-        'addEducatorForm': forms['Educateur'],
-        'addAdministratorForm': forms['Administrator'],
+    return render(request, 'add_profile.html', {
+        'form': form,
+        'model_name': model_name,
     })
-
 
 
 def add_academic_ue_views(request):
     logged_user = get_logged_user_from_request(request)
-    if logged_user:
-        if request.method == 'POST':
-            academicForm = AddAcademicUEForm(request.POST)
-            if academicForm.is_valid():
-                academicForm.save()  # Sauvegarde les données si le formulaire est valide
-                # Rediriger ou renvoyer une réponse après soumission
-        else:
-            form = AddAcademicUEForm()  # Crée une nouvelle instance du formulaire
+    if not logged_user:
+        return redirect('login')  # Ou une autre redirection en cas d'absence d'utilisateur connecté
 
-    return render(request, 'welcome_administrator/add_academic_ue.html',
-                  {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
+    if request.method == 'POST':
+        form = AddAcademicUEForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('success_page')  # Remplace par la page vers laquelle tu veux rediriger après ajout
+    else:
+        form = AddAcademicUEForm()
 
+    return render(request, 'welcome_administrator/add_academic_ue.html', {
+        'form': form,
+        'logged_user': logged_user,
+        'current_date_time': datetime.now(),
+    })
 
 
 def add_ue_views(request):

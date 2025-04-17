@@ -45,4 +45,3 @@ def get_logged_user_from_request(request):
 
     return user
 
-

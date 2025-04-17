@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ajout d'un Profil{% endblock %}
+{% block bodyId %}addProfilePage{% endblock %}
+
+{% block content %}
+<header class="welcome-header">
+    <div class="user-info">
+        Bienvenue sur IpefaSup, {{ logged_user.first_name }} {{ logged_user.last_name }}
+    </div>
+    <div class="date-time">
+        Nous sommes le {{ current_date_time }}
+    </div>
+</header>
+
+ <h1>Ajouter un profil</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="form_type">Choisir le type de compte :</label>
+        <select name="form_type" id="form_type" required>
+            <option value="student" {% if request.POST.form_type == 'student' %}selected{% endif %}>Étudiant</option>
+            <option value="teacher" {% if request.POST.form_type == 'teacher' %}selected{% endif %}>Enseignant</option>
+            <option value="administrator" {% if request.POST.form_type == 'administrator' %}selected{% endif %}>Administrateur</option>
+            <option value="educator" {% if request.POST.form_type == 'educator' %}selected{% endif %}>Éducateur</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Choisir le type de compte</button>
+    </form>
+
+   {% if form %}
+    <h2>Formulaire pour {{ model_name }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Créer le profil</button>
+    </form>
+{% endif %}
+
+
+{% endblock %}
