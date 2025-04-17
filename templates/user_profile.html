@@ -1,10 +1,33 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ipefa Sup - {% block title %}Bienvenue{% endblock %}</title>
 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body id="{% block bodyId %}genericPage{% endblock %}">
+    <header>
+        {% block headerContent %}{% endblock %}
+    </header>
+
+    <section id="content">
+        {% block content %}
+            <h1>Ajouter un profil</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ addAdministratorForm.as_p }}
+        <button type="submit">Envoyer</button>
+    </form>
+        {% endblock %}
+    </section>
+
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>
 </html>

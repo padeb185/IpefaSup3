@@ -119,43 +119,49 @@ def register(request):
                       {'studentForm': studentForm, 'teacherForm': teacherForm})
 
 
+
+
 def add_profile_views(request):
-    if len(request.POST) > 0 and 'profileType' in request.POST:
-        addStudentForm = AddStudentForm(prefix= 'st')
-        addTeacherForm = AddTeacherForm(prefix= 'te')
-        addEducatorForm = AddEducatorForm(prefix= 'ed')
-        addAdministratorForm = AddAdministratorForm(prefix= 'ad')
-        if request.POST['profileType'] == 'Etudiant':
-            addStudentForm = AddStudentForm(request.POST, prefix= 'st')
-            if addStudentForm.is_valid():
-                addStudentForm.save()
-                return redirect('/login')
-        elif request.POST['profileType'] == 'Professeur':
-            addTeacherForm = AddTeacherForm(request.POST, prefix= 'te')
-            if addTeacherForm.is_valid():
-                addTeacherForm.save()
-                return redirect('/login')
-        elif request.POST['profileType'] == 'Educateur':
-            addEducatorForm = AddEducatorForm(request.POST, prefix= 'ed')
-            if addEducatorForm.is_valid():
-                addEducatorForm.save()
-                return redirect('/login')
-        elif request.POST['profileType'] == 'Administrator':
-            addAdministratorForm = AddAdministratorForm(request.POST, prefix= 'ad')
-            if addAdministratorForm.is_valid():
-                addAdministratorForm.save()
+    # Initialisation des formulaires vides
+    forms = {
+        'Etudiant': AddStudentForm(prefix='st'),
+        'Professeur': AddTeacherForm(prefix='te'),
+        'Educateur': AddEducatorForm(prefix='ed'),
+        'Administrator': AddAdministratorForm(prefix='ad'),
+    }
+
+    if request.method == 'POST':
+        profile_type = request.POST.get('profileType')
+
+        form_classes = {
+            'Etudiant': AddStudentForm,
+            'Professeur': AddTeacherForm,
+            'Educateur': AddEducatorForm,
+            'Administrator': AddAdministratorForm,
+        }
+
+        if profile_type in form_classes:
+            # Création du formulaire avec données POST
+            prefix_map = {
+                'Etudiant': 'st',
+                'Professeur': 'te',
+                'Educateur': 'ed',
+                'Administrator': 'ad',
+            }
+
+            form = form_classes[profile_type](request.POST, prefix=prefix_map[profile_type])
+            forms[profile_type] = form  # Remplacement pour affichage si erreur
+
+            if form.is_valid():
+                form.save()
                 return redirect('/login')
 
-        return render(request, 'user_profile.html',
-                      {'addStudentForm': addStudentForm, 'addTeacherForm': addTeacherForm
-                                                   , 'addEducatorForm': addEducatorForm, 'addAdministratorForm': addAdministratorForm})
-    else:
-        addStudentForm = AddStudentForm(prefix= 'st')
-        addTeacherForm = AddTeacherForm(prefix= 'te')
-        addEducatorForm = AddEducatorForm(prefix= 'ed')
-        addAdministratorForm = AddAdministratorForm(prefix= 'ad')
-        return render(request, 'user_profile.html',
-                      {'addStudentForm': addStudentForm, 'addTeacherForm': addTeacherForm, 'addEducatorForm': addEducatorForm, 'addAdministratorForm': addAdministratorForm})
+    return render(request, 'user_profile.html', {
+        'addStudentForm': forms['Etudiant'],
+        'addTeacherForm': forms['Professeur'],
+        'addEducatorForm': forms['Educateur'],
+        'addAdministratorForm': forms['Administrator'],
+    })
 
 
 

@@ -192,7 +192,7 @@ class AddUEForm(forms.ModelForm):
     class Meta:
         model = UE
         fields = '__all__'
-        exclude = {}
+
 
 
 
@@ -236,5 +236,5 @@ class TeacherProfileForm(BaseListForm):
                 raise PermissionError("Accès réservé uniquement aux administrateurs ")
 
     class Meta:
-        model = Educator
+        model = Teacher
         fields = '__all__'  # Corriger la syntaxe
