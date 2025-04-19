@@ -52,20 +52,20 @@ class Teacher(Employee):
     person_type = 'professeur'
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} {self.employee_email}"
+        return f"{self.first_name} {self.last_name} {self.matricule}"
 
 
 class Educator(Employee):
     person_type = 'educateur'
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} {self.employee_email}"
+        return f"{self.first_name} {self.last_name} {self.matricule}"
 
 class Administrator(Educator):
     role = models.CharField(max_length=100, default="Administrator")
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.role}"
+        return f"{self.first_name} {self.last_name}  {self.matricule}- {self.role}"
 
     class Meta:
         db_table = 'IpefaSup3_administrator'

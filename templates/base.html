@@ -24,14 +24,5 @@
 </body>
 </html>
 {% block extra_js %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#form_type').on('change', function() {
-            let selectedType = $(this).val();
-            console.log("Form type selected: " + selectedType);  // Vérifie si l'événement est bien déclenché
-            loadForm(selectedType);  // Charger le bon formulaire
-        });
-    });
-</script>
+
 {% endblock %}

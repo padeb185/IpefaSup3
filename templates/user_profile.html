@@ -8,88 +8,64 @@
 {% block content %}
     <h1>Création d'un compte</h1>
 
-    <form>
-        <p>
-            <label for="profileType">Vous êtes :  </label>
-            <select id="profileType">
-                <option value="etudiant" {% if studentForm.is_bound %}
-                    selected="selected" {% endif %}>Etudiant</option>
-                <option value="professeur" {% if teacherForm.is_bound %}
-                    selected="selected" {% endif %}>Professeur</option>
-                <option value="educateur" {% if educatorForm.is_bound %}
-                    selected="selected" {% endif %}>Educateur</option>
-                <option value="administrateur" {% if administratorForm.is_bound %}
-                    selected="selected" {% endif %}>Administrateur</option>
-            </select>
-        </p>
-    </form>
+    <form method="post">
+        {% csrf_token %}
 
-    <form action="{% url 'register' %}" method="post" id="studentForm" style="display: none">
-        {% csrf_token %}
-        {{ studentForm.as_p }}
-        <p>
-            <input type="hidden" name="profileType" value="etudiant">
-            <input type="submit" value="Créer un compte">
-        </p>
-    </form>
+        <label for="profileType">Vous êtes :</label>
+        <select name="profileType" id="profileType">
+            <option value="Student" {% if studentForm.is_bound %}selected="selected"{% endif %}>Etudiant</option>
+            <option value="Teacher" {% if teacherForm.is_bound %}selected="selected"{% endif %}>Professeur</option>
+            <option value="Educator" {% if educatorForm.is_bound %}selected="selected"{% endif %}>Educateur</option>
+            <option value="Administrator" {% if administratorForm.is_bound %}selected="selected"{% endif %}>Administrateur</option>
+        </select>
 
-    <form action="{% url 'register' %}" method="post" id="teacherForm" style="display: none">
-        {% csrf_token %}
-        {{ studentForm.as_p }}
-        <p>
-            <input type="hidden" name="profileType" value="professeur">
-            <input type="submit" value="Créer un compte">
-        </p>
-    </form>
-    <form action="{% url 'register' %}" method="post" id="educatorForm" style="display: none">
-        {% csrf_token %}
-        {{ studentForm.as_p }}
-        <p>
-            <input type="hidden" name="profileType" value="educateur">
-            <input type="submit" value="Créer un compte">
-        </p>
-    </form>
-    <form action="{% url 'register' %}" method="post" id="administratorForm" style="display: none">
-        {% csrf_token %}
-        {{ studentForm.as_p }}
-        <p>
-            <input type="hidden" name="profileType" value="administrateur">
-            <input type="submit" value="Créer un compte">
-        </p>
+        <div id="studentForm" style="display: none;">
+            {{ studentForm.as_p }}
+        </div>
+
+        <div id="teacherForm" style="display: none;">
+            {{ teacherForm.as_p }}
+        </div>
+
+        <div id="educatorForm" style="display: none;">
+            {{ educatorForm.as_p }}
+        </div>
+
+        <div id="administratorForm" style="display: none;">
+            {{ administratorForm.as_p }}
+        </div>
+
+        <button type="submit">Créer un compte</button>
     </form>
 
     <script type="text/javascript">
-    function displayRightForm() {
-        var profileType = $('#profileType').val();
+        function displayRightForm() {
+            let profileType = $('#profileType').val();
 
-        if (profileType === 'etudiant') {
-            $('#studentForm').show();
-            $('#teacherForm').hide();
-            $('#educatorForm').hide();
-            $('#administratorForm').hide();
-        } else if (profileType === 'professeur') {
-            $('#studentForm').hide();
-            $('#teacherForm').show();
-            $('#educatorForm').hide();
-            $('#administratorForm').hide();
-        } else if (profileType === 'educateur') {
-            $('#studentForm').hide();
-            $('#teacherForm').hide();
-            $('#educatorForm').show();
-            $('#administratorForm').hide();
-        } else {
+            // Cache tous les formulaires au départ
             $('#studentForm').hide();
             $('#teacherForm').hide();
             $('#educatorForm').hide();
-            $('#administratorForm').show();
+            $('#administratorForm').hide();
+
+            // Affiche uniquement le formulaire correspondant au profil sélectionné
+            if (profileType === 'Student') {
+                $('#studentForm').show();
+            } else if (profileType === 'Teacher') {
+                $('#teacherForm').show();
+            } else if (profileType === 'Educator') {
+                $('#educatorForm').show();
+            } else if (profileType === 'Administrator') {
+                $('#administratorForm').show();
+            }
         }
-    }
-     $(document).ready(function() {
-        // Initialize form based on selected profile type
-        displayRightForm();
-        // Call displayRightForm whenever the profile type changes
-        $('#profileType').change(displayRightForm);
-    });
-</script>
+
+        $(document).ready(function() {
+            // Initialisation du formulaire en fonction du type de profil sélectionné
+            displayRightForm();
+            // Réexécuter displayRightForm chaque fois que le type de profil change
+            $('#profileType').change(displayRightForm);
+        });
+    </script>
 
 {% endblock %}
