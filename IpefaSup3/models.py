@@ -1,16 +1,23 @@
+import re
+from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import models
-import re
 
+def validate_student_email(email):
+    """
+    Fonction pour valider un email d'étudiant sous le format nom.prenom@student.efpl.be
+    """
+    # Utilisation de la méthode get_model pour éviter l'import circulaire
+    Student = apps.get_model('IpefaSup3', 'Student')  # Charger le modèle 'Student'
 
+    # Expression régulière pour valider le format nom.prenom@student.efpl.be
+    student_email_pattern = r"^[a-zA-Z0-9._%+-]+(\.[a-zA-Z0-9._%+-]+)*@student\.efpl\.be$"
 
-def custom_email_validator(value):
-    pattern = r'^[a-zA-Z]+\.[a-zA-Z]+@(student\.)?efpl\.be$'
-    if not re.match(pattern, value):
-        raise ValidationError(
-            "L'adresse email doit être au format nom.prenom@efpl.be ou nom.prenom@student.efpl.be"
-        )
-from django.db import models
+    # Vérification si l'email correspond au pattern
+    if re.match(student_email_pattern, email):
+        return True
+    return False
+
 
 class Person(models.Model):
     SEXE_CHOICES = [
@@ -54,12 +61,10 @@ class Educator(Employee):
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.employee_email}"
 
-
-class Administrator(Educator):  # Hérite de Educator
+class Administrator(Educator):
     role = models.CharField(max_length=100, default="Administrator")
 
     def __str__(self):
-        # Administrator hérite de first_name et last_name de Educator
         return f"{self.first_name} {self.last_name} - {self.role}"
 
     class Meta:
@@ -69,7 +74,7 @@ class Administrator(Educator):  # Hérite de Educator
 
 class Student(Person): # Hérite de Person
     person_type = 'etudiant'
-    studentMail = models.EmailField(validators=[custom_email_validator], unique=True)  # Email étudiant
+    studentMail = models.EmailField(validators=[validate_student_email], unique=True)  # Email étudiant
     sessions = models.ManyToManyField('Session', related_name='students',
                                       blank=True)  # Relation ManyToMany avec Session
     academic_ues = models.ManyToManyField('AcademicUE', related_name='students',
@@ -308,3 +313,7 @@ class Registration(models.Model):
 
 #John Doe (johndoe@student.university.com) inscrit à MATH101 - Mathématiques (2024-2025, Cycle 1) - Statut: AP
 #John Doe (johndoe@student.university.com) inscrit à MATH101 - Mathématiques (2024-2025, Cycle 1) - Statut: AP
+def custom_email_validator(email):
+    pattern = r"^[a-z]+\.[a-z]+@student\.efpl\.be$"
+    if not re.match(pattern, email):
+        raise ValidationError("L'adresse email doit être du type nom.prenom@student.efpl.be")

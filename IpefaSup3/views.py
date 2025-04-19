@@ -1,33 +1,33 @@
 from datetime import datetime
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+
+from django.contrib.auth.hashers import check_password
 from django.shortcuts import redirect, get_object_or_404
 from django.template.loader import render_to_string
-
 from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorForm, AddAcademicUEForm, AddUEForm, \
     StudentProfileForm, AddEducatorForm, TeacherProfileForm
-from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
+from .models import Educator, Student, Teacher, Administrator, \
+    validate_student_email
 from django.shortcuts import render
-from .utils import get_logged_user_from_request, validate_student_email
+from .utils import get_logged_user_from_request
 
 
 def welcome(request):
     logged_user = get_logged_user_from_request(request)
     if logged_user:
         if logged_user.person_type == 'etudiant':
-            return render(request, 'student/welcomeStudent.html',
-                          {'logged_user': logged_user})
+            return render(request, 'student/welcomeStudent.html', {'logged_user': logged_user})
         elif logged_user.person_type == 'professeur':
-            return render(request, 'teacher/welcomeTeacher.html',
-                          {'logged_user': logged_user})
+            return render(request, 'teacher/welcomeTeacher.html', {'logged_user': logged_user})
         elif logged_user.person_type == 'Educator':
-            return render(request,'educator/welcomeEducator.html' )
+            return render(request, 'educator/welcomeEducator.html')
         elif logged_user.person_type == 'administrateur':
-            return render(request, 'administrator/welcomeAdmin.html',
-                          {'logged_user': logged_user})
+            return render(request, 'administrator/welcomeAdmin.html', {'logged_user': logged_user})
         else:
-            return redirect('/login')
+            return redirect('/login')  # Cas où le type de personne n'est pas trouvé
     else:
-        return redirect('/login')
+        return redirect('/login')  # Si aucun utilisateur connecté
+
+
 def get_user_by_matricule(matricule):
     try:
         # Essayer de récupérer l'utilisateur par matricule, vérifier dans Teacher, puis Educator
@@ -40,39 +40,82 @@ def get_user_by_matricule(matricule):
 
 
 def login(request):
-    if len(request.POST) > 0:
+    if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data.get('email')
             user_matricule = form.cleaned_data.get('matricule')
+            password = form.cleaned_data.get('password')  # Assure-toi que ce champ est dans ton formulaire
 
             if user_email:
-                # Vérification si l'email est valide pour un étudiant
                 if validate_student_email(user_email):
-                    # Si l'email est valide, essayer de trouver un Student avec cet email
-                    logged_user = get_object_or_404(Student, studentMail=user_email)
-                    request.session['logged_user_id'] = logged_user.id
-                    return redirect('/welcome')
+                    try:
+                        logged_user = Student.objects.get(studentMail=user_email)
+                        if check_password(password, logged_user.password):
+                            request.session['logged_user_id'] = logged_user.id
+                            return redirect('/welcome')
+                        else:
+                            form.add_error('password', 'Mot de passe incorrect.')
+                    except Student.DoesNotExist:
+                        form.add_error('email', 'Aucun étudiant trouvé avec cet email.')
                 else:
                     form.add_error('email', 'L\'email n\'est pas valide pour un étudiant.')
+
             elif user_matricule:
-                # Si le matricule est fourni, chercher l'utilisateur
                 try:
                     logged_user = get_user_by_matricule(user_matricule)
-                    request.session['logged_user_id'] = logged_user.id
-                    return redirect('/welcome')
+                    if check_password(password, logged_user.password):
+                        request.session['logged_user_id'] = logged_user.id
+                        return redirect('/welcome')
+                    else:
+                        form.add_error('password', 'Mot de passe incorrect.')
                 except ValueError as e:
-                    # Ajouter l'erreur de matricule non trouvé
                     form.add_error('matricule', str(e))
             else:
-                form.add_error(None, 'Veuillez entrer un email ou un matricule.')  # Erreur si rien n'est entré
-
-        # Si le formulaire n'est pas valide ou s'il n'y a pas de correspondance
+                form.add_error(None, 'Veuillez entrer un email ou un matricule.')
         return render(request, 'login.html', {'form': form})
-
     else:
         form = LoginForm()
         return render(request, 'login.html', {'form': form})
+
+
+def register(request):
+    if len(request.POST) > 0 and 'profileType' in request.POST:
+        studentForm = AddStudentForm(prefix="st")
+        teacherForm = AddTeacherForm(prefix="te")
+        educatorForm = AddEducatorForm(prefix="ed")
+        administratorForm = AddAdministratorForm(prefix="ad")
+        if request.POST['profileType'] == 'Student':
+            if studentForm.is_valid():
+                studentForm.save()
+                return redirect('/login')
+        elif request.POST['profileType'] == 'Teacher':
+            if teacherForm.is_valid():
+                teacherForm.save()
+                return redirect('/login')
+        elif request.POST['profileType'] == 'Educator':
+            if educatorForm.is_valid():
+                educatorForm.save()
+                return redirect('/login')
+        elif request.POST['profileType'] == 'Administrator':
+            if administratorForm.is_valid():
+                administratorForm.save()
+                return redirect('/login')
+        return render(request, 'user_profile.html',
+                      {'studentForm': studentForm, 'teacherForm': teacherForm,
+                       'educatorForm': educatorForm, 'administratorForm': administratorForm})
+
+    else:
+        studentForm = AddStudentForm(prefix="st")
+        teacherForm = AddTeacherForm(prefix="te")
+        educatorForm = AddEducatorForm(prefix="ed")
+        administratorForm = AddAdministratorForm(prefix="ad")
+        return render(request, 'user_profile.html',
+                      {'studentForm': studentForm, 'teacherForm': teacherForm,
+                       'educatorForm': educatorForm,'administratorForm': administratorForm})
+
+
+
 
 def add_academic_ue_views(request):
     logged_user = get_logged_user_from_request(request)

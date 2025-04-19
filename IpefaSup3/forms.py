@@ -20,33 +20,32 @@ class LoginForm(forms.Form):
         matricule = cleaned_data.get("matricule")
 
         if email and password:
-            # Vérification de l'email pour un étudiant
             try:
-                student = Student.objects.get(email=email)
+                student = Student.objects.get(studentMail=email)
+                if not check_password(password, student.password):
+                    raise forms.ValidationError("Adresse mail ou mot de passe incorrect")
             except Student.DoesNotExist:
-                student = None
-            if student is None or not check_password(password, student.password):
                 raise forms.ValidationError("Adresse mail ou mot de passe incorrect")
 
         elif matricule and password:
-            # Vérification du matricule pour un enseignant
+            user = None
             try:
-                teacher = Teacher.objects.get(matricule=matricule.strip())
+                user = Teacher.objects.get(matricule=matricule.strip())
             except Teacher.DoesNotExist:
-                teacher = None
-            if teacher is None or not check_password(password, teacher.password):
-                raise forms.ValidationError("Matricule ou mot de passe incorrect")
-
-            # Vérification du matricule pour un éducateur (si l'enseignant n'est pas trouvé)
-            if teacher is None:
                 try:
-                    educator = Educator.objects.get(matricule=matricule.strip())
+                    user = Educator.objects.get(matricule=matricule.strip())
                 except Educator.DoesNotExist:
-                    educator = None
-                if educator is None or not check_password(password, educator.password):
                     raise forms.ValidationError("Matricule ou mot de passe incorrect")
 
+            if not check_password(password, user.password):
+                raise forms.ValidationError("Matricule ou mot de passe incorrect")
+
+        else:
+            raise forms.ValidationError("Veuillez entrer un email ou un matricule avec le mot de passe.")
+
         return cleaned_data
+
+
 
 
 class BaseListForm(forms.ModelForm):
@@ -69,14 +68,7 @@ class BaseListForm(forms.ModelForm):
             instance.save()
         return instance
 
-    def check_if_admin(self):
-        logged_user = get_logged_user_from_request(self.request)
-        if not logged_user or not isinstance(logged_user, Administrator):
-            raise PermissionError("Accès réservé aux administrateurs")
 
-    @property
-    def model_name(self):
-        return self._meta.model.__name__
 
 
 class AddStudentForm(BaseListForm):
@@ -85,19 +77,6 @@ class AddStudentForm(BaseListForm):
         model = Student
         exclude = {}
 
-    def __init__(self, *args, **kwargs):
-        # Récupérer 'request' si fourni
-        self.request = kwargs.pop('request', None)
-        super().__init__(*args, **kwargs)
-
-        if self.request:
-            from .utils import get_logged_user_from_request
-            logged_user = get_logged_user_from_request(self.request)
-
-            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
-            if not logged_user or not isinstance(logged_user, (Administrator, Educator)):
-                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs et Educateurs")
 
 
 
@@ -107,26 +86,12 @@ class AddTeacherForm(BaseListForm):
         model = Teacher
         exclude = {}
 
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super().__init__(*args, **kwargs)
-        if self.request:
-            self.check_if_admin()
-
 
 
 class AddAdministratorForm(BaseListForm):
     class Meta:
         model = Administrator
         exclude = {}
-
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super().__init__(*args, **kwargs)
-        if self.request:
-            self.check_if_admin()
-
-
 
 
 

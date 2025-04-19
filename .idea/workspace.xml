@@ -5,16 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="clean">
-      <change afterPath="$PROJECT_DIR$/templates/educator/welcomeEducator.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IpefaSup3/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/add_academic_ue.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/administrator/add_academic_ue.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/add_ue.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/administrator/add_ue.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/edit_student.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/administrator/edit_student.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/edit_teacher.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/administrator/edit_teacher.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/student_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/administrator/student_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/teacher_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/administrator/teacher_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/welcomeAdmin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/administrator/welcomeAdmin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/edcucator/welcomeEducator.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/add_profile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/administrator/welcomeAdmin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/administrator/welcomeAdmin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/educator/welcomeEducator.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/educator/welcomeEducator.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/teacher/welcomeTeacher.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacher/welcomeTeacher.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user_profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +65,7 @@
     &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
     &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
@@ -83,6 +86,7 @@
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates\administrator" />
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates\admin" />
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates" />
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates\welcome_administrator" />
@@ -225,15 +229,14 @@
       <workItem from="1745050951325" duration="6336000" />
       <workItem from="1745057520588" duration="1811000" />
       <workItem from="1745059890625" duration="385000" />
-      <workItem from="1745060651060" duration="628000" />
-    </task>
-    <task id="LOCAL-00008" summary="logged">
-      <option name="closed" value="true" />
-      <created>1744021150891</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1744021150891</updated>
+      <workItem from="1745060651060" duration="2344000" />
+      <workItem from="1745065164229" duration="5779000" />
+      <workItem from="1745072466126" duration="370000" />
+      <workItem from="1745072856014" duration="250000" />
+      <workItem from="1745073380269" duration="454000" />
+      <workItem from="1745073946411" duration="768000" />
+      <workItem from="1745074857161" duration="411000" />
+      <workItem from="1745075312193" duration="248000" />
     </task>
     <task id="LOCAL-00009" summary="loginForm">
       <option name="closed" value="true" />
@@ -619,7 +622,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745061011484</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="clean">
+      <option name="closed" value="true" />
+      <created>1745061513461</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1745061513461</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

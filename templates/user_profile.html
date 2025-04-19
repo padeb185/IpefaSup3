@@ -1,33 +1,95 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ipefa Sup - {% block title %}Bienvenue{% endblock %}</title>
 
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
-</head>
-<body id="{% block bodyId %}genericPage{% endblock %}">
-    <header>
-        {% block headerContent %}{% endblock %}
-    </header>
+{% block title %}Création d'un compte{% endblock %}
 
-    <section id="content">
-        {% block content %}
-            <h1>Ajouter un profil</h1>
+{% block bodyId %}userProfilePage{% endblock %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ addAdministratorForm.as_p }}
-        <button type="submit">Envoyer</button>
+{% block content %}
+    <h1>Création d'un compte</h1>
+
+    <form>
+        <p>
+            <label for="profileType">Vous êtes :  </label>
+            <select id="profileType">
+                <option value="etudiant" {% if studentForm.is_bound %}
+                    selected="selected" {% endif %}>Etudiant</option>
+                <option value="professeur" {% if teacherForm.is_bound %}
+                    selected="selected" {% endif %}>Professeur</option>
+                <option value="educateur" {% if educatorForm.is_bound %}
+                    selected="selected" {% endif %}>Educateur</option>
+                <option value="administrateur" {% if administratorForm.is_bound %}
+                    selected="selected" {% endif %}>Administrateur</option>
+            </select>
+        </p>
     </form>
-        {% endblock %}
-    </section>
 
-    <script type="text/javascript"
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-</body>
-</html>
+    <form action="{% url 'register' %}" method="post" id="studentForm" style="display: none">
+        {% csrf_token %}
+        {{ studentForm.as_p }}
+        <p>
+            <input type="hidden" name="profileType" value="etudiant">
+            <input type="submit" value="Créer un compte">
+        </p>
+    </form>
+
+    <form action="{% url 'register' %}" method="post" id="teacherForm" style="display: none">
+        {% csrf_token %}
+        {{ studentForm.as_p }}
+        <p>
+            <input type="hidden" name="profileType" value="professeur">
+            <input type="submit" value="Créer un compte">
+        </p>
+    </form>
+    <form action="{% url 'register' %}" method="post" id="educatorForm" style="display: none">
+        {% csrf_token %}
+        {{ studentForm.as_p }}
+        <p>
+            <input type="hidden" name="profileType" value="educateur">
+            <input type="submit" value="Créer un compte">
+        </p>
+    </form>
+    <form action="{% url 'register' %}" method="post" id="administratorForm" style="display: none">
+        {% csrf_token %}
+        {{ studentForm.as_p }}
+        <p>
+            <input type="hidden" name="profileType" value="administrateur">
+            <input type="submit" value="Créer un compte">
+        </p>
+    </form>
+
+    <script type="text/javascript">
+    function displayRightForm() {
+        var profileType = $('#profileType').val();
+
+        if (profileType === 'etudiant') {
+            $('#studentForm').show();
+            $('#teacherForm').hide();
+            $('#educatorForm').hide();
+            $('#administratorForm').hide();
+        } else if (profileType === 'professeur') {
+            $('#studentForm').hide();
+            $('#teacherForm').show();
+            $('#educatorForm').hide();
+            $('#administratorForm').hide();
+        } else if (profileType === 'educateur') {
+            $('#studentForm').hide();
+            $('#teacherForm').hide();
+            $('#educatorForm').show();
+            $('#administratorForm').hide();
+        } else {
+            $('#studentForm').hide();
+            $('#teacherForm').hide();
+            $('#educatorForm').hide();
+            $('#administratorForm').show();
+        }
+    }
+     $(document).ready(function() {
+        // Initialize form based on selected profile type
+        displayRightForm();
+        // Call displayRightForm whenever the profile type changes
+        $('#profileType').change(displayRightForm);
+    });
+</script>
+
+{% endblock %}

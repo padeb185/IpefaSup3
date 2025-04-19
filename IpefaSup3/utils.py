@@ -1,20 +1,11 @@
-from django.core.exceptions import ValidationError
-import re
 from IpefaSup3.models import Student, Teacher, Educator
-
-import re
-
-
-def validate_student_email(email):
-    # Expression régulière pour valider le format nom.prenom@student.efpl.be
-    pattern = r'^[a-zA-Z]+(\.[a-zA-Z]+)*@student\.efpl\.be$'
-    return bool(re.match(pattern, email))
 
 
 def get_logged_user_from_request(request):
     if 'logged_user_id' in request.session:
-        logged_user_id = request.session('logged_user_id')
+        logged_user_id = request.session['logged_user_id']  # Correction ici : utiliser des crochets []
 
+        # Vérification dans les modèles (Student, Teacher, Educator)
         if len(Student.objects.filter(id=logged_user_id)) == 1:
             return Student.objects.get(id=logged_user_id)
 
@@ -28,3 +19,14 @@ def get_logged_user_from_request(request):
     else:
         return None
 
+
+
+# IpefaSup3/utils.py
+
+import re
+from django.core.exceptions import ValidationError
+
+def validate_student_email(email):
+    pattern = r"^[a-z]+\.[a-z]+@student\.efpl\.be$"
+    if not re.match(pattern, email):
+        raise ValidationError("L'adresse email doit être du type nom.prenom@student.efpl.be")
