@@ -7,7 +7,7 @@ from .forms import LoginForm, AddStudentForm, AddTeacherForm, AddAdministratorFo
     StudentProfileForm, AddEducatorForm, TeacherProfileForm
 from .models import Educator, Student, Teacher, Administrator  # Assure-toi d'importer ton modèle Educator
 from django.shortcuts import render
-from .utils import get_logged_user_from_request
+from .utils import get_logged_user_from_request, validate_student_email
 
 
 def welcome(request):
@@ -28,38 +28,44 @@ def welcome(request):
             return redirect('/login')
     else:
         return redirect('/login')
-
+def get_user_by_matricule(matricule):
+    try:
+        # Essayer de récupérer l'utilisateur par matricule, vérifier dans Teacher, puis Educator
+        return Teacher.objects.get(matricule=matricule)
+    except Teacher.DoesNotExist:
+        try:
+            return Educator.objects.get(matricule=matricule)
+        except Educator.DoesNotExist:
+            raise ValueError('Matricule non trouvé.')  # Lever une exception si aucune correspondance
 
 
 def login(request):
     if len(request.POST) > 0:
         form = LoginForm(request.POST)
         if form.is_valid():
-            user_email = form.cleaned_data['email']
+            user_email = form.cleaned_data.get('email')
+            user_matricule = form.cleaned_data.get('matricule')
+
             if user_email:
-                logged_user = Student.objects.get(email=user_email)
-                request.session['logged_user_id'] = logged_user.id
-                return redirect('/welcome')
-            else:
-                # Cas où on vérifie le matricule
-                user_matricule = form.cleaned_data['matricule']
-                if user_matricule:
-                    try:
-                        logged_user = Teacher.objects.get(matricule=user_matricule)
-                        request.session['logged_user_id'] = logged_user.id
-                        return redirect('/welcome')
-                    except Teacher.DoesNotExist:
-                        # Gérer l'exception si le matricule n'est pas trouvé dans Teacher
-                        form.add_error('matricule', 'Matricule non trouvé.')
+                # Vérification si l'email est valide pour un étudiant
+                if validate_student_email(user_email):
+                    # Si l'email est valide, essayer de trouver un Student avec cet email
+                    logged_user = get_object_or_404(Student, studentMail=user_email)
+                    request.session['logged_user_id'] = logged_user.id
+                    return redirect('/welcome')
                 else:
-                    # Cas pour Educator
-                    try:
-                        logged_user = Educator.objects.get(matricule=user_matricule)
-                        request.session['logged_user_id'] = logged_user.id
-                        return redirect('/welcome')
-                    except Educator.DoesNotExist:
-                        # Gérer l'exception si le matricule n'est pas trouvé dans Educator
-                        form.add_error('matricule', 'Matricule non trouvé.')
+                    form.add_error('email', 'L\'email n\'est pas valide pour un étudiant.')
+            elif user_matricule:
+                # Si le matricule est fourni, chercher l'utilisateur
+                try:
+                    logged_user = get_user_by_matricule(user_matricule)
+                    request.session['logged_user_id'] = logged_user.id
+                    return redirect('/welcome')
+                except ValueError as e:
+                    # Ajouter l'erreur de matricule non trouvé
+                    form.add_error('matricule', str(e))
+            else:
+                form.add_error(None, 'Veuillez entrer un email ou un matricule.')  # Erreur si rien n'est entré
 
         # Si le formulaire n'est pas valide ou s'il n'y a pas de correspondance
         return render(request, 'login.html', {'form': form})
@@ -67,7 +73,6 @@ def login(request):
     else:
         form = LoginForm()
         return render(request, 'login.html', {'form': form})
-
 
 def add_academic_ue_views(request):
     logged_user = get_logged_user_from_request(request)
@@ -82,7 +87,7 @@ def add_academic_ue_views(request):
     else:
         form = AddAcademicUEForm()
 
-    return render(request, 'welcome_administrator/../templates/admin/add_academic_ue.html', {
+    return render(request, 'admin/add_academic_ue.html', {
         'form': form,
         'logged_user': logged_user,
         'current_date_time': datetime.now(),

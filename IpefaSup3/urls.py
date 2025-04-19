@@ -23,9 +23,6 @@ urlpatterns = [
     path('', login, name='login'),
     path("login/", login, name="login"),
     path("welcome/", welcome, name="welcome"),
-   # Page pour le professeur
-    path('ajouter-profil/', add_profile, name='add_profile'),
-    path('welcome_student/', welcome_student, name='welcome_student'),  # Page
     path('welcome_administrator/add_academic_ue/', add_academic_ue_views, name='add_academic_ue'),
     path('welcome_administrator/add_ue/', add_ue_views, name='add_ue'),
     path('admin/students/', student_list, name='student_list'),

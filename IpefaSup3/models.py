@@ -10,7 +10,7 @@ def custom_email_validator(value):
         raise ValidationError(
             "L'adresse email doit être au format nom.prenom@efpl.be ou nom.prenom@student.efpl.be"
         )
-
+from django.db import models
 
 class Person(models.Model):
     SEXE_CHOICES = [
@@ -30,44 +30,40 @@ class Person(models.Model):
     person_type = 'generic'
 
     class Meta:
-        abstract = True  # Empêche la création de la table Employee
-
+        abstract = True  # Empêche la création de la table Person
 
 
 class Employee(Person):
     employee_email = models.EmailField(unique=True)
     matricule = models.CharField(max_length=255)
 
-
     class Meta:
         abstract = True  # Empêche la création de la table Employee
 
 
-
-
 class Teacher(Employee):
     person_type = 'professeur'
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.employee_email}"
-
-
-
 
 
 class Educator(Employee):
     person_type = 'educateur'
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.employee_email}"
 
 
-
-class Administrator(Educator):  # Hérite de Employee
-    # Vous pouvez ajouter des attributs ou méthodes spécifiques aux administrateurs
+class Administrator(Educator):  # Hérite de Educator
     role = models.CharField(max_length=100, default="Administrator")
-    person_type = 'administrateur'
+
     def __str__(self):
+        # Administrator hérite de first_name et last_name de Educator
         return f"{self.first_name} {self.last_name} - {self.role}"
 
+    class Meta:
+        db_table = 'IpefaSup3_administrator'
 
 
 

@@ -8,7 +8,7 @@
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
-    <form action="{% url 'login' %}" method="post" >
+    <form action="{% url 'login' %}" method="post">
       {% csrf_token %}
       {% if error %}
       <p class="error">{{ error }}</p>
@@ -16,14 +16,13 @@
 
         <p>
             <label for="profileType">Vous êtes : </label>
-            <select>
+            <select id="profileType" name="profileType">
                 <option value="etudiant">Etudiant</option>
                 <option value="professeur">Professeur</option>
                 <option value="educateur">Educateur</option>
                 <option value="administrateur">Administrateur</option>
             </select>
         </p>
-
 
         <p id="pmail">
             <label for="email">E-mail : </label>
@@ -39,26 +38,39 @@
             <label for="password">Mot de passe : </label>
             <input name="password" id="password" size="30" type="password">
         </p>
+
+        <p>
+            <button type="submit">Se connecter</button>
+        </p>
     </form>
 
     <script type="text/javascript">
         function displayRightForm() {
-            if ($('#profileType').val() === 'etudiant') {
+            // Get the selected profile type
+            var profileType = $('#profileType').val();
+
+            if (profileType === 'etudiant') {
+                // Show email input for student
                 $('#pmail').show();
                 $('#email').prop('required', true);
+                // Hide matricule input for student
                 $('#pmatricule').hide();
                 $('#matricule').prop('required', false);
-            } else
+            } else {
+                // Show matricule input for others
                 $('#pmail').hide();
                 $('#email').prop('required', false);
                 $('#pmatricule').show();
                 $('#matricule').prop('required', true);
+            }
         }
-        $(document).ready(function() {
-            displayRightForm();
-            $('#profileType').change(displayRightForm)
-        });
 
+        $(document).ready(function() {
+            // Initialize form based on selected profile type
+            displayRightForm();
+            // Call displayRightForm whenever the profile type changes
+            $('#profileType').change(displayRightForm);
+        });
     </script>
 
 {% endblock %}

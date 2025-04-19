@@ -6,14 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b58103b6-a9e6-490c-8263-7f0d426af4ee" name="Changes" comment="jquery">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/migrations/0002_alter_administrator_password_alter_educator_password_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/IpefaSup3/migrations/0003_alter_student_studentmail.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/IpefaSup3/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IpefaSup3/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IpefaSup3/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/IpefaSup3/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/add_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/add_profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,6 +79,7 @@
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates\admin" />
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates" />
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates\welcome_administrator" />
       <recent name="C:\Users\pierr\PycharmProjects\IpefaSup3\templates\login" />
@@ -221,15 +218,9 @@
       <workItem from="1744989292539" duration="290000" />
       <workItem from="1744993141735" duration="102000" />
       <workItem from="1745050427347" duration="490000" />
-      <workItem from="1745050951325" duration="4217000" />
-    </task>
-    <task id="LOCAL-00006" summary="logged">
-      <option name="closed" value="true" />
-      <created>1743957752975</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1743957752975</updated>
+      <workItem from="1745050951325" duration="6336000" />
+      <workItem from="1745057520588" duration="1811000" />
+      <workItem from="1745059890625" duration="385000" />
     </task>
     <task id="LOCAL-00007" summary="logged">
       <option name="closed" value="true" />
@@ -615,7 +606,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744888324028</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="jquery">
+      <option name="closed" value="true" />
+      <created>1745056943368</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1745056943368</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
