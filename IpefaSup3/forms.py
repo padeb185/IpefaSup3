@@ -102,25 +102,9 @@ class AddEducatorForm(BaseListForm):
         model = Educator
         exclude = {}
 
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super().__init__(*args, **kwargs)
-        if self.request:
-            self.check_if_admin()
 
 
 class AddAcademicUEForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)  # On récupère `request` si fourni
-        super().__init__(*args, **kwargs)
-
-        if self.request:
-            logged_user = get_logged_user_from_request(self.request)
-
-            # Vérification que l'utilisateur est bien un administrateur
-            if not logged_user or not isinstance(logged_user, Administrator):
-                # Si l'utilisateur n'est pas un administrateur, on peut lever une exception ou rediriger
-                raise PermissionError("Accès réservé uniquement aux administrateurs")
 
     class Meta:
         model = AcademicUE
@@ -129,18 +113,7 @@ class AddAcademicUEForm(forms.ModelForm):
 
 class AddUEForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)  # On récupère `request` si fourni
-        super().__init__(*args, **kwargs)
 
-        if self.request:
-            from .utils import get_logged_user_from_request
-            logged_user = get_logged_user_from_request(self.request)
-
-            # Vérification que l'utilisateur est bien un administrateur
-            if not logged_user or not isinstance(logged_user, Administrator):
-                # Si l'utilisateur n'est pas un administrateur, on peut lever une exception ou rediriger
-                raise PermissionError("Accès réservé uniquement aux administrateurs")
     class Meta:
         model = UE
         fields = '__all__'
@@ -151,19 +124,6 @@ class AddUEForm(forms.ModelForm):
 
 class StudentProfileForm(BaseListForm):#liste des étudiants
 
-    def __init__(self, *args, **kwargs):
-        # Récupérer 'request' si fourni
-        self.request = kwargs.pop('request', None)
-        super().__init__(*args, **kwargs)
-
-        if self.request:
-            from .utils import get_logged_user_from_request
-            logged_user = get_logged_user_from_request(self.request)
-
-            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
-            if not logged_user or not isinstance(logged_user, (Administrator, Educator)):
-                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs et éducateur")
 
     class Meta:
         model = Student
@@ -173,19 +133,6 @@ class StudentProfileForm(BaseListForm):#liste des étudiants
 
 class TeacherProfileForm(BaseListForm):
 
-    def __init__(self, *args, **kwargs):
-        # Récupérer 'request' si fourni
-        self.request = kwargs.pop('request', None)
-        super().__init__(*args, **kwargs)
-
-        if self.request:
-            from .utils import get_logged_user_from_request
-            logged_user = get_logged_user_from_request(self.request)
-
-            # Vérification que l'utilisateur est soit un Administrator soit un Teacher
-            if not logged_user or not isinstance(logged_user, Administrator):
-                # Si l'utilisateur n'est pas un Administrator ou un Teacher, on l'empêche d'accéder
-                raise PermissionError("Accès réservé uniquement aux administrateurs ")
 
     class Meta:
         model = Teacher
