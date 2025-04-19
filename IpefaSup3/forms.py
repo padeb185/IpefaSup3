@@ -5,13 +5,6 @@ from .utils import validate_student_email
 from django import forms
 
 
-
-
-from django import forms
-from django.contrib.auth.hashers import check_password
-from .models import Student, Teacher, Educator
-from .validators import validate_student_email  # Si vous avez un validateur personnalisé pour l'email des étudiants
-
 class LoginForm(forms.Form):
     matricule = forms.CharField(label='Matricule', required=False)
     email = forms.EmailField(label="Courriel", required=False, validators=[validate_student_email])
