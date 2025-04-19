@@ -27,7 +27,7 @@ class Person(models.Model):
     city = models.CharField(max_length=100)
     private_email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
-
+    person_type = 'generic'
 
     class Meta:
         abstract = True  # Empêche la création de la table Employee
@@ -46,6 +46,7 @@ class Employee(Person):
 
 
 class Teacher(Employee):
+    person_type = 'professeur'
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.employee_email}"
 
@@ -54,22 +55,24 @@ class Teacher(Employee):
 
 
 class Educator(Employee):
+    person_type = 'educateur'
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.employee_email}"
 
 
 
-class Administrator(Employee):  # Hérite de Employee
+class Administrator(Educator):  # Hérite de Employee
     # Vous pouvez ajouter des attributs ou méthodes spécifiques aux administrateurs
     role = models.CharField(max_length=100, default="Administrator")
-
+    person_type = 'administrateur'
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.role}"
 
 
 
 
-class Student(Person):  # Hérite de Person
+class Student(Person): # Hérite de Person
+    person_type = 'etudiant'
     studentMail = models.EmailField(validators=[custom_email_validator], unique=True)  # Email étudiant
     sessions = models.ManyToManyField('Session', related_name='students',
                                       blank=True)  # Relation ManyToMany avec Session

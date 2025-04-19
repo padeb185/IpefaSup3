@@ -14,32 +14,52 @@
     </div>
 </header>
 
- <h1>Ajouter un profil</h1>
+<h1>Ajouter un profil</h1>
 
-    <form method="POST">
-        {% csrf_token %}
+<!-- Sélecteur de type -->
+<form id="typeSelectorForm">
+    <label for="form_type">Choisir le type de compte :</label>
+    <select name="form_type" id="form_type" required>
+        <option value="student" {% if form_type == 'student' %}selected{% endif %}>Étudiant</option>
+        <option value="teacher" {% if form_type == 'teacher' %}selected{% endif %}>Enseignant</option>
+        <option value="administrator" {% if form_type == 'administrator' %}selected{% endif %}>Administrateur</option>
+        <option value="educator" {% if form_type == 'educator' %}selected{% endif %}>Éducateur</option>
+    </select>
+</form>
 
-        <label for="form_type">Choisir le type de compte :</label>
-        <select name="form_type" id="form_type" required>
-            <option value="student" {% if request.POST.form_type == 'student' %}selected{% endif %}>Étudiant</option>
-            <option value="teacher" {% if request.POST.form_type == 'teacher' %}selected{% endif %}>Enseignant</option>
-            <option value="administrator" {% if request.POST.form_type == 'administrator' %}selected{% endif %}>Administrateur</option>
-            <option value="educator" {% if request.POST.form_type == 'educator' %}selected{% endif %}>Éducateur</option>
-        </select>
+<hr>
 
-        <br><br>
+<!-- Zone d’injection du formulaire -->
+<div id="formContainer">
+    {% include 'partials/formulaire_profil.html' %}
+</div>
 
-        <button type="submit">Choisir le type de compte</button>
-    </form>
+{% endblock %}
 
-   {% if form %}
-    <h2>Formulaire pour {{ model_name }}</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Créer le profil</button>
-    </form>
-{% endif %}
+{% block extra_js %}
+<script>
+    function loadForm(formType) {
+        $.ajax({
+            url: "{% url 'add_profile' %}",  // URL de la vue
+            data: {
+                form_type: formType
+            },
+            success: function(data) {
+                // Mettre à jour le contenu avec le formulaire chargé via AJAX
+                $('#formContainer').html(data.html_form);
+            },
+            error: function(xhr, status, error) {
+                console.error("Erreur AJAX : " + status + " " + error);
+            }
+        });
+    }
 
-
+     $(document).ready(function() {
+        $('#form_type').on('change', function() {
+            let selectedType = $(this).val();
+            console.log("Form type selected: " + selectedType);  // Vérifie si l'événement est bien déclenché
+            loadForm(selectedType);  // Charger le bon formulaire
+        });
+    });
+</script>
 {% endblock %}

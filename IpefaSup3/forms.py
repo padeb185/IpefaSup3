@@ -3,50 +3,51 @@ from .models import  Educator,  Teacher, Student, Administrator, AcademicUE, UE
 from django.contrib.auth.hashers import make_password, check_password
 from .utils import validate_efpl_email_or_student_email, get_logged_user_from_request
 
+from django import forms
+from django.contrib.auth.hashers import check_password
+from .models import Student, Teacher, Educator
+
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label="Courriel", required=True, validators=[validate_efpl_email_or_student_email])
+    matricule = forms.CharField(label='Matricule', required=False)
+    email = forms.EmailField(label="Courriel", required=False, validators=[validate_efpl_email_or_student_email])
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput, required=True)
 
     def clean(self):
         cleaned_data = super().clean()
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
+        matricule = cleaned_data.get("matricule")
 
         if email and password:
-            user = None
+            # Vérification de l'email pour un étudiant
+            try:
+                etudiant = Student.objects.get(email=email)
+            except Student.DoesNotExist:
+                etudiant = None
+            if etudiant is None or not check_password(password, etudiant.password):
+                raise forms.ValidationError("Adresse mail ou mot de passe incorrect")
 
-            # Recherche dans Educator
-            for educator in Educator.objects.filter(employee_email=email):
-                if check_password(password, educator.password):
-                    user = educator
-                    break
+        elif matricule and password:
+            # Vérification du matricule pour un enseignant
+            try:
+                teacher = Teacher.objects.get(matricule=matricule.strip())
+            except Teacher.DoesNotExist:
+                teacher = None
+            if teacher is None or not check_password(password, teacher.password):
+                raise forms.ValidationError("Matricule ou mot de passe incorrect")
 
-            # Recherche dans Teacher
-            if not user:
-                for teacher in Teacher.objects.filter(employee_email=email):
-                    if check_password(password, teacher.password):
-                        user = teacher
-                        break
-
-            # Recherche dans Administrator
-            if not user:
-                for admin in Administrator.objects.filter(employee_email=email):
-                    if check_password(password, admin.password):
-                        user = admin
-                        break
-
-            # Recherche dans Student
-            if not user:
-                for student in Student.objects.filter(studentMail=email):
-                    if check_password(password, student.password):
-                        user = student
-                        break
-
-            if not user:
-                raise forms.ValidationError("Adresse de courriel ou mot de passe erroné.")
+            # Vérification du matricule pour un éducateur (si l'enseignant n'est pas trouvé)
+            if teacher is None:
+                try:
+                    educator = Educator.objects.get(matricule=matricule.strip())
+                except Educator.DoesNotExist:
+                    educator = None
+                if educator is None or not check_password(password, educator.password):
+                    raise forms.ValidationError("Matricule ou mot de passe incorrect")
 
         return cleaned_data
+
 
 class BaseListForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, required=False, label='Mot de passe')
