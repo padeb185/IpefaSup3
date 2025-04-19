@@ -1,7 +1,7 @@
 from django import forms
 from .models import  Educator,  Teacher, Student, Administrator, AcademicUE, UE
 from django.contrib.auth.hashers import make_password, check_password
-from .utils import validate_efpl_email_or_student_email, get_logged_user_from_request
+from .utils import get_logged_user_from_request, validate_student_email
 
 from django import forms
 from django.contrib.auth.hashers import check_password
@@ -10,7 +10,7 @@ from .models import Student, Teacher, Educator
 
 class LoginForm(forms.Form):
     matricule = forms.CharField(label='Matricule', required=False)
-    email = forms.EmailField(label="Courriel", required=False, validators=[validate_efpl_email_or_student_email])
+    email = forms.EmailField(label="Courriel", required=False, validators=[validate_student_email])
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput, required=True)
 
     def clean(self):
@@ -22,10 +22,10 @@ class LoginForm(forms.Form):
         if email and password:
             # Vérification de l'email pour un étudiant
             try:
-                etudiant = Student.objects.get(email=email)
+                student = Student.objects.get(email=email)
             except Student.DoesNotExist:
-                etudiant = None
-            if etudiant is None or not check_password(password, etudiant.password):
+                student = None
+            if student is None or not check_password(password, student.password):
                 raise forms.ValidationError("Adresse mail ou mot de passe incorrect")
 
         elif matricule and password:

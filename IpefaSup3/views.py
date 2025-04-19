@@ -20,9 +20,9 @@ def welcome(request):
             return render(request, 'teacher/welcomeTeacher.html',
                           {'logged_user': logged_user})
         elif logged_user.person_type == 'Educator':
-            return render(request,'edcucator/welcomeEducator.html' )
+            return render(request,'educator/welcomeEducator.html' )
         elif logged_user.person_type == 'administrateur':
-            return render(request, 'admin/welcomeAdmin.html',
+            return render(request, 'administrator/welcomeAdmin.html',
                           {'logged_user': logged_user})
         else:
             return redirect('/login')
@@ -87,7 +87,7 @@ def add_academic_ue_views(request):
     else:
         form = AddAcademicUEForm()
 
-    return render(request, 'admin/add_academic_ue.html', {
+    return render(request, 'administrator/add_academic_ue.html', {
         'form': form,
         'logged_user': logged_user,
         'current_date_time': datetime.now(),
@@ -105,7 +105,7 @@ def add_ue_views(request):
         else:
             form = AddUEForm()  # Crée une nouvelle instance du formulaire
 
-        return render(request, 'welcome_administrator/../templates/admin/add_ue.html',
+        return render(request, 'administrator/add_ue.html',
                       {'form': form, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 
@@ -123,7 +123,7 @@ def student_list(request):
         else:
             students = Student.objects.all()
 
-        return render(request, 'admin/student_list.html',
+        return render(request, 'administrator/student_list.html',
                       {'students': students, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def edit_student(request, student_id):
@@ -139,7 +139,7 @@ def edit_student(request, student_id):
         else:
             form = StudentProfileForm(instance=student)
 
-        return render(request, 'admin/edit_student.html', {'form': form, 'student': student, 'logged_user': logged_user, 'current_date_time': datetime.now})
+        return render(request, 'administrator/edit_student.html', {'form': form, 'student': student, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def teacher_list(request):
     logged_user = get_logged_user_from_request(request)
@@ -153,7 +153,7 @@ def teacher_list(request):
         else:
             teachers = Teacher.objects.all()
 
-        return render(request, 'welcome_administrator/../templates/admin/teacher_list.html', {'teachers': teachers, 'logged_user': logged_user, 'current_date_time': datetime.now})
+        return render(request, 'administrator/teacher_list.html', {'teachers': teachers, 'logged_user': logged_user, 'current_date_time': datetime.now})
 
 def edit_teacher(request, teacher_id):
     logged_user = get_logged_user_from_request(request)
@@ -168,4 +168,4 @@ def edit_teacher(request, teacher_id):
         else:
             form = TeacherProfileForm(instance=teacher)
 
-        return render(request, 'welcome_administrator/../templates/admin/edit_teacher.html', {'form': form, 'teacher': teacher, 'logged_user': logged_user, 'current_date_time': datetime.now})
+        return render(request, 'administrator/edit_teacher.html', {'form': form, 'teacher': teacher, 'logged_user': logged_user, 'current_date_time': datetime.now})
